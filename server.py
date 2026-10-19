@@ -738,6 +738,23 @@ if os.environ.get("NO_PREWARM") != "1":
 
 
 PUBLIC_URL = os.environ.get("PUBLIC_URL", "https://www.forbrary.com")
+_domain_ok = False
+
+
+def _watch_domain():
+    """Only redirect to the real domain once it actually answers (certificates take a while to issue)."""
+    global _domain_ok
+    while True:
+        try:
+            with urllib.request.urlopen(PUBLIC_URL + "/api/schools", timeout=10) as r:
+                _domain_ok = r.status == 200
+        except Exception:
+            _domain_ok = False
+        time.sleep(600 if _domain_ok else 60)
+
+
+if os.environ.get("NO_PREWARM") != "1":
+    threading.Thread(target=_watch_domain, daemon=True).start()
 
 
 def menu_page(base):
@@ -887,7 +904,7 @@ class Handler(SimpleHTTPRequestHandler):
     def redirect_to_domain(self, path):
         """Pages requested on the Render address or the bare domain go to www.forbrary.com (one address for Google)."""
         host = self.headers.get("Host", "")
-        if (host.endswith("onrender.com") or host == "forbrary.com") and not path.startswith("/api/"):
+        if _domain_ok and (host.endswith("onrender.com") or host == "forbrary.com") and not path.startswith("/api/"):
             self.send_response(301)
             self.send_header("Location", PUBLIC_URL + self.path)
             self.send_header("Content-Length", "0")
