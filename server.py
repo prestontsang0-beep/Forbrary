@@ -571,8 +571,9 @@ def get_schools():
 import base64
 import datetime
 
-PUSH_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "push-subs.json")
-VAPID_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vapid.json")
+DATA_DIR = os.environ.get("DATA_DIR") or os.path.dirname(os.path.abspath(__file__))  # a persistent disk on hosts that wipe the code dir
+PUSH_FILE = os.path.join(DATA_DIR, "push-subs.json")
+VAPID_FILE = os.path.join(DATA_DIR, "vapid.json")
 PUSH_CONTACT = os.environ.get("PUSH_CONTACT", "mailto:milton-menu@example.com")
 try:
     from pywebpush import webpush, WebPushException
@@ -600,7 +601,12 @@ def _save_subs():
 
 
 def _vapid():
-    """Load or create the VAPID key pair. Returns (private_pem, public_key_b64url)."""
+    """Load or create the VAPID key pair. Returns (private_pem, public_key_b64url).
+    On a host with no persistent disk (Render, Fly), set VAPID_PRIVATE_KEY (the PEM, newlines
+    may be written as \\n) and VAPID_PUBLIC_KEY so the keys survive restarts."""
+    env_priv, env_pub = os.environ.get("VAPID_PRIVATE_KEY"), os.environ.get("VAPID_PUBLIC_KEY")
+    if env_priv and env_pub:
+        return env_priv.replace("\\n", "\n").strip() + "\n", env_pub.strip()
     try:
         with open(VAPID_FILE) as f:
             d = json.load(f)

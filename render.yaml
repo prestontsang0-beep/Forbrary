@@ -1,0 +1,20 @@
+# Render blueprint: one always-on Python web service that serves the app, the menu API and push notifications.
+services:
+  - type: web
+    name: forbrary
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    healthCheckPath: /api/schools
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: PUSH_CONTACT
+        value: mailto:prestontsang1@gmail.com
+      - key: VAPID_PRIVATE_KEY
+        sync: false   # paste from vapid.json in the Render dashboard
+      - key: VAPID_PUBLIC_KEY
+        sync: false
