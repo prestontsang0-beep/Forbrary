@@ -1,0 +1,13 @@
+# Rebuilds the Netlify site every morning so the baked-in menus stay fresh.
+# Needs a repository secret NETLIFY_BUILD_HOOK (Netlify → Site configuration → Build & deploy → Build hooks).
+name: Daily menu rebuild
+on:
+  schedule:
+    - cron: "30 9 * * *"   # 09:30 UTC = 05:30 Eastern (04:30 in summer)
+  workflow_dispatch:
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask Netlify to rebuild
+        run: curl -fsS -X POST "${{ secrets.NETLIFY_BUILD_HOOK }}"
