@@ -6,3 +6,5 @@ Forbrary-netlify.zip
 __pycache__/
 *.log
 .DS_Store
+render.env
+.env
