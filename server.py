@@ -12,6 +12,7 @@ No third-party dependencies.
 
 import json
 import os
+import html
 import re
 import threading
 import time
@@ -736,6 +737,42 @@ if os.environ.get("NO_PREWARM") != "1":
     threading.Thread(target=_prewarm, daemon=True).start()
 
 
+def menu_page(base):
+    """Today's menus for every hall and meal as plain HTML (search engines read this)."""
+    today = datetime.date.today()
+    parts = [f"<h1>Forbrary · Milton Academy menus for {html.escape(today.strftime('%A %d %B %Y'))}</h1>",
+             f'<p>Calories and macros for every dish, station by station. <a href="{html.escape(base)}/">Open the app</a> to build a plate.</p>']
+    try:
+        schools = get_schools()
+    except Exception:
+        schools = []
+    for sch in schools:
+        parts.append(f"<h2>{html.escape(sch['name'])} Dining Hall</h2>")
+        for m in sch["meals"]:
+            try:
+                items = [i for i in get_menu(sch["slug"], m["slug"], today.isoformat()) if i.get("hasNutrition")]
+            except Exception:
+                items = []
+            if not items:
+                continue
+            parts.append(f"<h3>{html.escape(m['name'])}</h3><ul>")
+            station = None
+            for it in items:
+                st = (it.get("stations") or [""])[0]
+                if st != station:
+                    station = st
+                    parts.append(f"<li><strong>{html.escape(st)}</strong></li>")
+                n = it.get("nutrition") or {}
+                parts.append(f"<li>{html.escape(it['name'])} — {round(n.get('calories') or 0)} kcal, {round(n.get('protein') or 0)} g protein"
+                             + (f", {html.escape(it['serving'])}" if it.get("serving") else "") + "</li>")
+            parts.append("</ul>")
+    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Today's Milton Academy menus · Forbrary</title><meta name="description" content="Today's Milton Academy dining hall menus (Forbes, Elliott, Junior) with calories and protein for every dish.">
+<link rel="canonical" href="{html.escape(base)}/today.html">
+<style>body{{margin:0;padding:24px 16px 60px;max-width:760px;margin-inline:auto;background:#101113;color:#f2ece2;font:16px/1.5 -apple-system,Helvetica,Arial,sans-serif}}a{{color:#efb08a}}h1{{font-size:28px;line-height:1.15}}h2{{margin-top:36px;border-top:1px solid rgba(242,236,226,.16);padding-top:18px}}ul{{padding-left:20px}}li{{margin:4px 0}}</style>
+</head><body>{''.join(parts)}<p style="margin-top:40px;color:#9b978e;font-size:13px">Nutrition data is what Milton Dining publishes to Nutrislice.</p></body></html>"""
+
+
 class Handler(SimpleHTTPRequestHandler):
     extensions_map = {**SimpleHTTPRequestHandler.extensions_map, ".webp": "image/webp", ".webmanifest": "application/manifest+json"}
 
@@ -800,6 +837,18 @@ class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=STATIC_DIR, **kwargs)
 
+    def send_app_page(self):
+        """index.html with the canonical address and, if set, Google's site-verification tag."""
+        with open(os.path.join(STATIC_DIR, "index.html"), encoding="utf-8") as f:
+            page = f.read()
+        base = self.site_url()
+        extra = f'<link rel="canonical" href="{html.escape(base)}/">\n<meta property="og:url" content="{html.escape(base)}/">\n'
+        token = os.environ.get("GOOGLE_SITE_VERIFICATION", "").strip()
+        if token:
+            extra += f'<meta name="google-site-verification" content="{html.escape(token)}">\n'
+        page = page.replace("</head>", extra + "</head>", 1)
+        return self.send_text(200, page, "text/html; charset=utf-8", cache="no-cache")
+
     def end_headers(self):
         # Always revalidate the page and scripts so edits show up on a normal refresh.
         if not self.path.startswith("/api/"):
@@ -810,6 +859,23 @@ class Handler(SimpleHTTPRequestHandler):
         if not self.path.startswith("/api/"):
             return
         super().log_message(fmt, *args)
+
+    def send_text(self, status, body, ctype, cache="public, max-age=600"):
+        data = body.encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(data)))
+        self.send_header("Cache-Control", cache)
+        self.end_headers()
+        self.wfile.write(data)
+
+    def site_url(self):
+        """The public address, from the proxy headers Render sets (or SITE_URL)."""
+        env = os.environ.get("SITE_URL", "").rstrip("/")
+        if env:
+            return env
+        proto = self.headers.get("X-Forwarded-Proto", "http").split(",")[0].strip()
+        return f"{proto}://{self.headers.get('Host', 'localhost')}"
 
     def send_json(self, status, payload):
         body = json.dumps(payload).encode("utf-8")
@@ -822,6 +888,15 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         url = urlparse(self.path)
+        if url.path in ("/", "/index.html"):
+            return self.send_app_page()
+        if url.path == "/sitemap.xml":
+            base, today = self.site_url(), datetime.date.today().isoformat()
+            urls = "".join(f"<url><loc>{html.escape(base + p)}</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq><priority>{pr}</priority></url>"
+                           for p, pr in (("/", "1.0"), ("/today.html", "0.8")))
+            return self.send_text(200, f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>', "application/xml")
+        if url.path == "/today.html":
+            return self.send_text(200, menu_page(self.site_url()), "text/html; charset=utf-8")
         if not url.path.startswith("/api/"):
             return super().do_GET()
         q = {k: v[0] for k, v in parse_qs(url.query).items()}
