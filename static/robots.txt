@@ -1,4 +1,1 @@
-User-agent: *
-Allow: /
-Disallow: /api/
-Sitemap: https://forbrary.onrender.com/sitemap.xml
+User-agent: *\nAllow: /\nDisallow: /api/\nSitemap: https://www.forbrary.com/sitemap.xml\n

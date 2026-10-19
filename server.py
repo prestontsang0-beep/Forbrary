@@ -737,6 +737,9 @@ if os.environ.get("NO_PREWARM") != "1":
     threading.Thread(target=_prewarm, daemon=True).start()
 
 
+PUBLIC_URL = os.environ.get("PUBLIC_URL", "https://www.forbrary.com")
+
+
 def menu_page(base):
     """Today's menus for every hall and meal as plain HTML (search engines read this)."""
     today = datetime.date.today()
@@ -870,12 +873,27 @@ class Handler(SimpleHTTPRequestHandler):
         self.wfile.write(data)
 
     def site_url(self):
-        """The public address, from the proxy headers Render sets (or SITE_URL)."""
+        """The public address for canonical links and the sitemap: SITE_URL, else the real domain
+        when we are on it or on the Render host, else whatever host the request came in on."""
         env = os.environ.get("SITE_URL", "").rstrip("/")
         if env:
             return env
+        host = self.headers.get("Host", "localhost")
+        if host.endswith("forbrary.com") or host.endswith("onrender.com"):
+            return PUBLIC_URL
         proto = self.headers.get("X-Forwarded-Proto", "http").split(",")[0].strip()
-        return f"{proto}://{self.headers.get('Host', 'localhost')}"
+        return f"{proto}://{host}"
+
+    def redirect_to_domain(self, path):
+        """Pages requested on the Render address or the bare domain go to www.forbrary.com (one address for Google)."""
+        host = self.headers.get("Host", "")
+        if (host.endswith("onrender.com") or host == "forbrary.com") and not path.startswith("/api/"):
+            self.send_response(301)
+            self.send_header("Location", PUBLIC_URL + self.path)
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return True
+        return False
 
     def send_json(self, status, payload):
         body = json.dumps(payload).encode("utf-8")
@@ -888,6 +906,8 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         url = urlparse(self.path)
+        if self.redirect_to_domain(url.path):
+            return
         if url.path in ("/", "/index.html"):
             return self.send_app_page()
         if url.path == "/sitemap.xml":
