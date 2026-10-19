@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Milton Menu — Optimize your Forbes plate</title>
+<meta name="description" content="The Forbes dining hall menu with calories and macros for every dish, and a one-tap plate builder.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* One hue, eleven tones. Everything on the page is a tint or shade of this blue. */
+:root {
+  --t950: #070d1c; --t900: #0d1733; --t850: #111e42; --t800: #172754; --t700: #203569;
+  --t600: #2c4784; --t500: #3b5ca6; --t400: #6079bd; --t300: #92a4d4; --t200: #c4cfeb; --t100: #e5eaf8; --t50: #f4f6fd;
+  --font: "Manrope", system-ui, -apple-system, sans-serif;
+  --r: 18px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--t900); color: var(--t100); font: 16px/1.55 var(--font); overflow-x: hidden; }
+a { color: inherit; }
+img { display: block; max-width: 100%; }
+.wrap { max-width: 1140px; margin: 0 auto; padding: 0 22px; }
+h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -.02em; line-height: 1.05; }
+h2 { font-size: clamp(30px, 4.6vw, 48px); color: var(--t50); }
+.lbl { font-size: 12.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--t300); }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 1.5px solid transparent; transition: background .2s, border-color .2s, color .2s, transform .2s; }
+.btn.light { background: var(--t100); color: var(--t900); }
+.btn.light:hover { background: var(--t50); transform: translateY(-1px); }
+.btn.line { border-color: var(--t500); color: var(--t100); }
+.btn.line:hover { border-color: var(--t300); background: var(--t850); }
+.btn.deep { background: var(--t900); color: var(--t50); }
+.btn.deep:hover { background: var(--t800); }
+
+/* ---------- nav ---------- */
+nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--t900) 82%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--t800); }
+.nav { max-width: 1140px; margin: 0 auto; padding: 16px 22px; display: flex; align-items: center; gap: 28px; }
+.mark { font-weight: 800; font-size: 18px; letter-spacing: -.02em; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+.mark i { width: 28px; height: 28px; border-radius: 8px; background: var(--t100); color: var(--t900); display: grid; place-items: center; font-style: normal; font-size: 15px; }
+.links { display: flex; gap: 24px; margin-left: auto; font-size: 14.5px; font-weight: 600; color: var(--t200); }
+.links a { text-decoration: none; }
+.links a:hover { color: var(--t50); }
+.nav .btn { padding: 10px 18px; font-size: 14px; }
+@media (max-width: 760px) { .links { display: none; } .nav .btn { margin-left: auto; } }
+
+/* ---------- hero ---------- */
+.hero { padding: 72px 0 80px; position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: -40% -20% auto; height: 120%; background: radial-gradient(60% 50% at 70% 30%, var(--t800), transparent 70%); pointer-events: none; }
+.hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 56px; align-items: center; }
+.hero h1 { font-size: clamp(42px, 7vw, 84px); color: var(--t50); }
+.hero h1 span { color: var(--t300); }
+.hero p { font-size: clamp(17px, 1.6vw, 20px); color: var(--t200); max-width: 520px; margin: 22px 0 32px; }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero .lbl { margin-bottom: 18px; }
+.stack { position: relative; height: 440px; }
+.tile { position: absolute; width: 62%; background: var(--t850); border: 1px solid var(--t700); border-radius: var(--r); overflow: hidden; box-shadow: 0 30px 60px -30px var(--t950); transition: transform .3s ease; }
+.tile img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.tile .cap { padding: 12px 14px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.tile .cap b { font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tile .cap span { font-size: 12.5px; color: var(--t300); white-space: nowrap; }
+.tile.a { left: 0; top: 0; z-index: 3; }
+.tile.b { right: 0; top: 70px; z-index: 2; transform: scale(.92); opacity: .95; }
+.tile.c { left: 18%; bottom: 0; z-index: 1; transform: scale(.84); opacity: .85; }
+.stack:hover .tile.b { transform: scale(.94) translateX(8px); }
+.stack:hover .tile.c { transform: scale(.86) translateY(6px); }
+.ph { aspect-ratio: 1; background: linear-gradient(135deg, var(--t800), var(--t700)); display: grid; place-items: center; font-size: 56px; font-weight: 800; color: var(--t400); }
+@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } .stack { height: 360px; margin-top: 10px; } .tile { width: 58%; } }
+
+/* ---------- stats band ---------- */
+.band { background: var(--t850); border-top: 1px solid var(--t800); border-bottom: 1px solid var(--t800); }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); }
+.stat { padding: 28px 22px; border-left: 1px solid var(--t800); }
+.stat:first-child { border-left: 0; }
+.stat b { display: block; font-size: clamp(30px, 4vw, 46px); font-weight: 800; letter-spacing: -.02em; color: var(--t50); line-height: 1; }
+.stat span { display: block; margin-top: 8px; font-size: 13px; color: var(--t300); }
+@media (max-width: 700px) { .stats { grid-template-columns: 1fr 1fr; } .stat:nth-child(3) { border-left: 0; } .stat:nth-child(n+3) { border-top: 1px solid var(--t800); } }
+
+/* ---------- sections ---------- */
+section { padding: 88px 0; }
+.sec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 14px; margin-bottom: 36px; }
+.sec-head p { margin: 0; color: var(--t300); max-width: 460px; }
+.sec-head .lbl { display: block; margin-bottom: 10px; }
+
+/* dishes */
+.dishes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.dish { background: var(--t850); border: 1px solid var(--t800); border-radius: var(--r); overflow: hidden; text-decoration: none; transition: transform .25s ease, border-color .25s, background .25s; }
+.dish:hover { transform: translateY(-3px); border-color: var(--t600); background: var(--t800); }
+.dish img, .dish .ph { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.dish .ph { aspect-ratio: 4 / 3; }
+.dish .body { padding: 16px 18px 18px; }
+.dish .nm { font-weight: 700; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dish .st { font-size: 12.5px; color: var(--t300); margin-top: 2px; }
+.dish .nums { display: flex; gap: 18px; margin-top: 12px; font-size: 13px; color: var(--t300); }
+.dish .nums b { display: block; font-size: 18px; color: var(--t50); }
+@media (max-width: 860px) { .dishes { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 540px) { .dishes { grid-template-columns: 1fr; } }
+
+/* steps */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.step { border-radius: var(--r); padding: 28px 26px 30px; border: 1px solid var(--t700); }
+.step:nth-child(1) { background: var(--t850); } .step:nth-child(2) { background: var(--t800); } .step:nth-child(3) { background: var(--t700); }
+.step .n { font-size: 13px; font-weight: 800; letter-spacing: .14em; color: var(--t300); }
+.step h3 { font-size: 22px; margin: 14px 0 10px; color: var(--t50); }
+.step p { margin: 0; color: var(--t200); }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
+
+/* feature list */
+.light { background: var(--t100); color: var(--t900); }
+.light h2 { color: var(--t900); }
+.light .sec-head p, .light .lbl { color: var(--t500); }
+.list { border-top: 1px solid var(--t200); }
+.item { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 22px; align-items: baseline; padding: 24px 0; border-bottom: 1px solid var(--t200); }
+.item .n { font-weight: 800; color: var(--t400); font-size: 14px; letter-spacing: .1em; }
+.item h3 { font-size: 20px; margin-bottom: 6px; }
+.item p { margin: 0; color: var(--t600); max-width: 640px; }
+.item .tag { font-size: 12.5px; font-weight: 700; color: var(--t500); white-space: nowrap; }
+@media (max-width: 600px) { .item { grid-template-columns: 1fr; gap: 6px; } .item .tag { display: none; } }
+
+/* faq */
+.faq details { border-bottom: 1px solid var(--t800); }
+.faq details:first-child { border-top: 1px solid var(--t800); }
+.faq summary { cursor: pointer; list-style: none; padding: 20px 0; font-weight: 700; font-size: 18px; display: flex; justify-content: space-between; gap: 16px; color: var(--t100); }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; color: var(--t300); font-size: 24px; line-height: .8; font-weight: 400; }
+.faq details[open] summary::after { content: "–"; }
+.faq .a { padding: 0 0 22px; color: var(--t200); max-width: 720px; }
+
+/* final */
+.final { background: var(--t50); color: var(--t900); padding: 110px 0; text-align: center; }
+.final h2 { color: var(--t900); font-size: clamp(36px, 6vw, 72px); }
+.final p { color: var(--t600); font-size: 18px; max-width: 520px; margin: 18px auto 32px; }
+footer { padding: 28px 0 44px; font-size: 13px; color: var(--t300); }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 30px; justify-content: space-between; }
+
+/* reveal: fade and settle */
+.rv { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+.rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .rv { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } .tile, .dish, .btn { transition: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav">
+    <a class="mark" href="#top"><i>M</i>Milton Menu</a>
+    <div class="links"><a href="#menu">What's on</a><a href="#how">How it works</a><a href="#get">What you get</a><a href="#faq">Questions</a></div>
+    <a class="btn light" href="/">Open the app</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="lbl" id="hero-lbl">Forbes Dining Hall</div>
+      <h1>Optimize your<br>Forbes <span>plate.</span></h1>
+      <p>The full menu with calories and macros for every dish. Pick a goal, tap once, and get a plate that fits it. Works for Forbes, Elliott and Junior.</p>
+      <div class="ctas"><a class="btn light" href="/">Build a plate</a><a class="btn line" href="#menu">See what's on</a></div>
+    </div>
+    <div class="stack rv" id="stack" aria-label="Three dishes from today's menu"></div>
+  </div>
+</header>
+
+<div class="band">
+  <div class="wrap stats" id="stats">
+    <div class="stat"><b>—</b><span>Dishes today</span></div>
+    <div class="stat"><b>—</b><span>Stations</span></div>
+    <div class="stat"><b>—</b><span>Plant-based options</span></div>
+    <div class="stat"><b>—</b><span>Top protein dish</span></div>
+  </div>
+</div>
+
+<section id="menu">
+  <div class="wrap">
+    <div class="sec-head rv"><div><span class="lbl" id="menu-lbl">Today</span><h2 id="menu-h">What's on at Forbes</h2></div><p id="menu-p">The dishes with the most protein on the menu right now. Numbers are per serving, straight from the dining hall's own data.</p></div>
+    <div class="dishes" id="dishes"></div>
+    <p style="margin:26px 0 0" class="rv"><a class="btn line" href="/">Full menu with nutrition labels</a></p>
+  </div>
+</section>
+
+<section id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv"><div><span class="lbl">How it works</span><h2>Three steps, no account</h2></div><p>Your goals and plates are saved in your browser. Nothing is sent anywhere.</p></div>
+    <div class="steps">
+      <div class="step rv"><div class="n">01</div><h3>Set a goal</h3><p>Lean out, maintain or build muscle, or type in your own calories and macros. Each meal gets a share of the day.</p></div>
+      <div class="step rv"><div class="n">02</div><h3>Look at the menu</h3><p>Every dish on the line today, by station, with a full nutrition label, allergens and ingredients.</p></div>
+      <div class="step rv"><div class="n">03</div><h3>Tap once</h3><p>The optimizer picks dishes and portions that land on your targets. Or plan all three meals of the day together.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="light" id="get">
+  <div class="wrap">
+    <div class="sec-head rv"><div><span class="lbl">What you get</span><h2>The parts that matter</h2></div></div>
+    <div class="list">
+      <div class="item rv"><span class="n">01</span><div><h3>Nutrition labels for every dish</h3><p>Calories, protein, carbs, fat, fiber, sodium, sugar and vitamins, per serving.</p></div><span class="tag">Live from Nutrislice</span></div>
+      <div class="item rv"><span class="n">02</span><div><h3>An optimal plate</h3><p>Half-serving precision. Coming up short on protein counts against a plate more than going over, sodium is kept in check, and you can require a vegetable.</p></div><span class="tag">One tap</span></div>
+      <div class="item rv"><span class="n">03</span><div><h3>A whole-day plan</h3><p>Breakfast, lunch and dinner planned together so the day adds up. Shuffle for other combinations.</p></div><span class="tag">All meals</span></div>
+      <div class="item rv"><span class="n">04</span><div><h3>Favorites and filters</h3><p>Heart the dishes you like, hide allergens, filter vegetarian or vegan. Plates you build are kept so you can come back to them.</p></div><span class="tag">Saved in your browser</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head rv"><div><span class="lbl">Questions</span><h2>Things people ask</h2></div></div>
+    <div class="faq rv">
+      <details><summary>Where does the data come from?</summary><div class="a">From Nutrislice, the menu system Milton's dining service publishes to. Nothing is typed in by hand, so when the dining hall changes a dish, the app changes with it.</div></details>
+      <details><summary>Are the photos the actual dishes?</summary><div class="a">No. The dining hall doesn't publish photos, so each dish is shown with a stock photo of the same kind of food. The numbers are the real ones.</div></details>
+      <details><summary>How accurate is the nutrition info?</summary><div class="a">It's exactly what the dining service publishes, which is usually right and occasionally odd (a sauce listing every allergen, say). Treat allergen info as a starting point and check with dining staff.</div></details>
+      <details><summary>What does "optimal" mean?</summary><div class="a">Closest to your calorie and macro targets for that meal, with a few rules: being short on protein counts against a plate more than going over, sodium is kept in check, and fiber earns a small bonus.</div></details>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2 class="rv">Open the menu.</h2>
+    <p class="rv">Today's dishes, your goals, one tap.</p>
+    <a class="btn deep rv" href="/">Build a plate</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Milton Menu is a student project, not affiliated with Milton Academy.</span>
+    <span>Menu data: Milton Academy Dining via Nutrislice. Photos: TheMealDB.</span>
+  </div>
+</footer>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const r0 = x => Math.round(x || 0);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function iso(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; }
+const h = new Date().getHours();
+const pref = h < 10.5 ? ["breakfast", "brunch", "lunch", "dinner"] : h < 14 ? ["lunch", "brunch", "dinner", "breakfast"] : ["dinner", "lunch", "brunch", "breakfast"];
+const WHEN = { breakfast: "this morning", brunch: "this morning", lunch: "at lunch", dinner: "tonight" };
+const cap = s => s ? s[0].toUpperCase() + s.slice(1) : "";
+const photo = (it, size = "medium") => it.photo ? `<img src="${esc(it.photo)}${it.photoKind === "meal" ? "/" + size : ""}" alt="" loading="lazy">` : `<div class="ph">${esc(it.name[0])}</div>`;
+
+async function api(path) { const r = await fetch(path); if (!r.ok) throw new Error(r.status); return r.json(); }
+
+(async function live() {
+  const today = iso(new Date());
+  let items = [], meal = null, counts = {};
+  try {
+    const schools = (await api("/api/schools")).schools;
+    const forbes = schools.find(s => s.slug === "forbes") || schools[0];
+    const menus = await Promise.all(forbes.meals.map(m => api(`/api/menu?school=${forbes.slug}&meal=${m.slug}&date=${today}`).then(b => [m.slug, b.items || []]).catch(() => [m.slug, []])));
+    for (const [slug, list] of menus) counts[slug] = list.length;
+    meal = pref.find(m => counts[m] > 0) || null;
+    items = meal ? menus.find(([s]) => s === meal)[1] : [];
+  } catch (e) {
+    $("#menu-p").textContent = "The menu service isn't reachable right now.";
+    return;
+  }
+  if (!meal) { $("#menu-h").textContent = "No menu published today"; $("#menu-p").textContent = "Check back on a school day."; return; }
+  const withN = items.filter(i => i.hasNutrition && (i.nutrition.calories || 0) >= 15);
+  const bulk = i => !!i.bulk || (i.grams && i.grams > 450) || /\b(lb|lbs|quart|gallon)\b/i.test(i.serving || "");
+  const top = withN.filter(i => !bulk(i) && !/sauce|dressing|gravy|crema|syrup/i.test(i.name) && (i.nutrition.calories || 0) >= 60)
+    .sort((a, b) => (b.nutrition.protein || 0) - (a.nutrition.protein || 0));
+  const dateText = new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+
+  $("#hero-lbl").textContent = `Forbes Dining Hall · ${cap(meal)} · ${dateText}`;
+  $("#stack").innerHTML = top.slice(0, 3).map((i, n) => `<div class="tile ${"abc"[n]}">${photo(i)}<div class="cap"><b>${esc(i.name)}</b><span>${r0(i.nutrition.calories)} kcal · ${r0(i.nutrition.protein)}g</span></div></div>`).join("");
+
+  const stations = new Set(withN.map(i => i.stations[0])).size;
+  const plant = withN.filter(i => i.diet.includes("Vegan") || i.diet.includes("Vegetarian")).length;
+  const st = $("#stats").children;
+  st[0].querySelector("b").textContent = withN.length; st[0].querySelector("span").textContent = `Dishes at ${meal}`;
+  st[1].querySelector("b").textContent = stations;
+  st[2].querySelector("b").textContent = plant;
+  if (top[0]) { st[3].querySelector("b").textContent = `${r0(top[0].nutrition.protein)}g`; st[3].querySelector("span").textContent = `Protein · ${top[0].name}`; }
+
+  $("#menu-lbl").textContent = `${cap(meal)} · ${WHEN[meal] || "today"}`;
+  $("#menu-h").textContent = `What's on at Forbes ${WHEN[meal] || "today"}`;
+  $("#dishes").innerHTML = top.slice(0, 6).map(i => `<a class="dish rv" href="/">${photo(i)}<div class="body">
+    <div class="nm">${esc(i.name)}</div><div class="st">${esc(i.stations[0] || "")} · ${esc(i.serving || "1 serving")}</div>
+    <div class="nums"><span><b>${r0(i.nutrition.calories)}</b>kcal</span><span><b>${r0(i.nutrition.protein)}g</b>protein</span><span><b>${r0(i.nutrition.carbs)}g</b>carbs</span><span><b>${r0(i.nutrition.fat)}g</b>fat</span></div>
+  </div></a>`).join("");
+  watch();
+})();
+
+// fade-and-settle reveals, driven by scroll position (no observers or animation
+// frames, so it also works when the page is throttled or hidden)
+let pending = [];
+function reveal() {
+  const vh = innerHeight;
+  pending = pending.filter(el => {
+    const r = el.getBoundingClientRect();
+    if (r.top < vh * 0.9 && r.bottom > 0) { el.classList.add("in"); return false; }
+    return true;
+  });
+}
+let timer = 0;
+function watch() {
+  pending = [...document.querySelectorAll(".rv:not(.in)")]; reveal();
+  clearInterval(timer); // also poll briefly, in case scroll events are throttled (hidden or background tab)
+  timer = setInterval(() => { reveal(); if (!pending.length) clearInterval(timer); }, 250);
+}
+addEventListener("scroll", reveal, { passive: true });
+addEventListener("resize", reveal);
+watch();
+</script>
+</body>
+</html>

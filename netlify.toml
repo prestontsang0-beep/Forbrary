@@ -1,0 +1,13 @@
+# Netlify: build the static edition and publish it.
+[build]
+  command = "python3 build_static.py"
+  publish = "dist"
+
+[build.environment]
+  DAYS = "7"            # days of menus to bake in; a daily rebuild keeps them fresh
+  NO_PREWARM = "1"
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=600"

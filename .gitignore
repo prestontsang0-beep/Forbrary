@@ -1,0 +1,8 @@
+.venv/
+push-subs.json
+vapid.json
+dist/
+Forbrary-netlify.zip
+__pycache__/
+*.log
+.DS_Store
