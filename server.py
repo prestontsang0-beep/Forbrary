@@ -904,7 +904,9 @@ class Handler(SimpleHTTPRequestHandler):
     def redirect_to_domain(self, path):
         """Pages requested on the Render address or the bare domain go to www.forbrary.com (one address for Google)."""
         host = self.headers.get("Host", "")
-        if _domain_ok and (host.endswith("onrender.com") or host == "forbrary.com") and not path.startswith("/api/"):
+        # Off unless REDIRECT_TO_DOMAIN=1: the school's web filter (Cisco Umbrella) blocks the new domain on campus
+        # for now, so sending onrender.com visitors there would strand them on a block page.
+        if os.environ.get("REDIRECT_TO_DOMAIN") == "1" and _domain_ok and (host.endswith("onrender.com") or host == "forbrary.com") and not path.startswith("/api/"):
             self.send_response(301)
             self.send_header("Location", PUBLIC_URL + self.path)
             self.send_header("Content-Length", "0")
