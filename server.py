@@ -24,6 +24,10 @@ from urllib.parse import parse_qs, urlparse
 
 API = "https://milton.api.nutrislice.com/menu/api"
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+# Dining-hall time, wherever the server runs (Render boxes are on UTC): today's menu, digests, prewarm.
+os.environ.setdefault("TZ", "America/New_York")
+if hasattr(time, "tzset"):
+    time.tzset()
 CACHE_TTL = 30 * 60  # seconds
 
 SLUG_RE = re.compile(r"^[a-z0-9-]{1,40}$")

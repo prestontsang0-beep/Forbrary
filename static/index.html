@@ -1832,7 +1832,15 @@ async function loadDay(keepMeal = true) {
 }
 function refresh() { renderToday(); renderMenu(); renderPlate(); renderStation(); syncShare(); renderPlanSummary(); }
 function selectMeal(slug) { state.meal = slug; state.filters.station = ""; refresh(); }
-function setDate(d) { state.date = d; $("#date").value = d; state.open.clear(); loadDay(true); }
+function setDate(d, auto = false) {
+  state.date = d; $("#date").value = d; state.open.clear();
+  state.follow = d === iso(new Date());   // picking another day stops the automatic roll-over; picking today resumes it
+  loadDay(!auto);                          // a new day re-picks the meal by time of day
+}
+function followToday() {
+  const today = iso(new Date());
+  if (state.follow !== false && state.date !== today && state.schools.length) { setDate(today, true); toast(`Now showing ${prettyDate(today)}`); }
+}
 const isDesktop = () => matchMedia("(min-width: 1200px)").matches;
 function homeMode() {  // every section in the flow, the cover on top
   state.screen = "today"; $("main").dataset.screen = "today"; $(".app").classList.remove("sv-mode");
@@ -1928,6 +1936,9 @@ function toggleFav(it) { const n = it.name.toLowerCase(); state.favs.has(n) ? st
 function bind() {
   $("#school").onchange = e => { state.school = e.target.value; store.set("school", state.school); state.meal = null; state.filters.station = ""; loadDay(false); pushSync(); };
   $("#date").onchange = e => e.target.value && setDate(e.target.value);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") followToday(); });
+  addEventListener("pageshow", followToday); addEventListener("focus", followToday);
+  setInterval(followToday, 60 * 1000);
   $("#prev").onclick = () => { const d = parseISO(state.date); d.setDate(d.getDate() - 1); setDate(iso(d)); };
   $("#next").onclick = () => { const d = parseISO(state.date); d.setDate(d.getDate() + 1); setDate(iso(d)); };
   for (const id of ["#meals2"]) $(id).onclick = e => { const t = e.target.closest("[data-meal]"); if (t && !t.disabled) selectMeal(t.dataset.meal); };
