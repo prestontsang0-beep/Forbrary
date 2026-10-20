@@ -50,7 +50,7 @@ img { display: block; max-width: 100%; }
 .mark { font-family: var(--display); font-size: 13px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--gold-2); display: flex; align-items: center; gap: 10px; white-space: nowrap; text-decoration: none; }
 .mark::before, .mark::after { content: "◆"; font-size: 7px; color: var(--gold); }
 .top .date { display: flex; align-items: center; gap: 4px; }
-.top .date button { border: 1px solid var(--gold-dim); background: transparent; color: var(--gold-2); width: 32px; height: 32px; line-height: 1; font-size: 18px; }
+.top .date button { border: 1px solid var(--gold-dim); background: transparent; color: var(--gold-2); width: 40px; height: 40px; line-height: 1; font-size: 18px; }
 .top .date label { position: relative; font-family: var(--display); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--cream); padding: 0 8px; white-space: nowrap; }
 .top .date input { position: absolute; inset: 0; opacity: 0; width: 100%; }
 main { padding: 0 0 calc(var(--tabs) + var(--sab) + 20px); }
@@ -95,7 +95,7 @@ img.oct, .thumb[style*="background-image"] { filter: saturate(.88) contrast(.96)
 /* chips */
 .chips { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 6px; scrollbar-width: none; }
 .chips::-webkit-scrollbar { display: none; }
-.chip { flex: none; border: 1px solid var(--gold-dim); background: transparent; color: var(--muted); padding: 7px 13px; font-family: var(--display); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; min-height: 36px; white-space: nowrap; }
+.chip { flex: none; border: 1px solid var(--gold-dim); background: transparent; color: var(--muted); padding: 9px 14px; font-family: var(--display); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; min-height: 44px; white-space: nowrap; }
 .chip[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--ink); }
 .chip.avoid[aria-pressed="true"] { background: var(--jewel); border-color: var(--jewel); color: var(--cream); }
 
@@ -135,7 +135,7 @@ img.oct, .thumb[style*="background-image"] { filter: saturate(.88) contrast(.96)
 .pick .nums { display: flex; justify-content: center; gap: 14px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--gold-faint); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .pick .nums b { display: block; font-family: var(--display); font-weight: 400; font-size: 16px; color: var(--cream); letter-spacing: .04em; }
 .pick .add { position: absolute; right: 10px; top: 10px; z-index: 1; }
-.add { width: 38px; height: 38px; border: 1px solid var(--gold); background: var(--gold); color: var(--ink); font-size: 22px; line-height: 1; display: grid; place-items: center; padding: 0; }
+.add { width: 44px; height: 44px; border: 1px solid var(--gold); background: var(--gold); color: var(--ink); font-size: 22px; line-height: 1; display: grid; place-items: center; padding: 0; }
 .add.on { background: var(--panel); color: var(--gold-2); font-size: 16px; }
 .add:disabled { opacity: .35; }
 
@@ -188,10 +188,10 @@ details.fold summary::-webkit-details-marker { display: none; }
 .plist li:first-child { border-top: 0; }
 .plist .pn { font-weight: 500; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ctl { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
-.qty { display: inline-flex; align-items: center; border: 1px solid var(--gold-dim); height: 30px; }
-.qty button { border: 0; background: transparent; width: 30px; height: 28px; color: var(--gold-2); font-size: 16px; line-height: 1; }
+.qty { display: inline-flex; align-items: center; border: 1px solid var(--gold-dim); height: 40px; }
+.qty button { border: 0; background: transparent; width: 40px; height: 38px; color: var(--gold-2); font-size: 16px; line-height: 1; }
 .qty span { font-size: 12px; min-width: 30px; text-align: center; color: var(--cream); }
-.mini { border: 1px solid transparent; background: transparent; width: 30px; height: 30px; color: var(--muted); font-size: 13px; }
+.mini { border: 1px solid transparent; background: transparent; width: 40px; height: 40px; color: var(--muted); font-size: 13px; }
 .mini.on { color: var(--gold-2); border-color: var(--gold-dim); }
 .pr { font-family: var(--display); font-size: 15px; color: var(--gold-2); white-space: nowrap; text-align: right; }
 .pr small { display: block; font: 300 10px var(--body); color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
@@ -304,7 +304,7 @@ h1 b, h2, .stat b, .total b, .target b, .kc, .pr { background: linear-gradient(1
   background-size: 14px 1px, 1px 14px, 14px 1px, 1px 14px, 14px 1px, 1px 14px, 14px 1px, 1px 14px;
   background-position: left top, left top, right top, right top, left bottom, left bottom, right bottom, right bottom; }
 .pick, .trio .frame, .rcard { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .35s; }
-.pick:hover, .trio .frame:hover, .rcard:hover { transform: translateY(-4px); border-color: var(--gold); box-shadow: 0 26px 44px -26px rgba(201,162,74,.75), 0 0 0 1px var(--gold-faint); }
+.pick:hover, .trio .frame:hover, .rcard:hover { border-color: var(--gold); }
 .pick img, .trio img { transition: transform .6s cubic-bezier(.2,.8,.2,1); }
 .pick:hover img, .trio .frame:hover img { transform: scale(1.04); }
 .hero::before { animation: sunburst 90s linear infinite; }
@@ -434,8 +434,6 @@ h1 b { font-weight: 600; }
 .hero::before { animation: sunburst 60s cubic-bezier(.45, 0, .55, 1) infinite alternate; will-change: transform; }
 .screen.active { animation: rise .45s cubic-bezier(.2, .7, .2, 1) both; }
 @keyframes rise { from { opacity: 0; transform: translateY(12px); } }
-.screen.active > :nth-child(2) { animation: rise .5s .05s cubic-bezier(.2, .7, .2, 1) both; }
-.screen.active > :nth-child(3) { animation: rise .5s .1s cubic-bezier(.2, .7, .2, 1) both; }
 .screen.active > .rule::before { transform-origin: right; animation: wipe .7s .1s cubic-bezier(.2, .7, .2, 1) both; }
 .screen.active > .rule::after { transform-origin: left; animation: wipe .7s .1s cubic-bezier(.2, .7, .2, 1) both; }
 @keyframes wipe { from { transform: scaleX(0); } }
@@ -578,10 +576,8 @@ main:not([data-screen="today"]) > .cover { display: none; }
 .strip-tools .zoom { display: inline-flex; align-items: center; gap: 8px; font: 600 var(--t-1) var(--display); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
 .strip-tools input[type=range] { width: 64px; accent-color: var(--peach); }
 .strip-n { font: 400 13px var(--mega); letter-spacing: .02em; color: var(--cream); font-variant-numeric: tabular-nums; min-width: 54px; text-align: right; }
-.arrow { width: 34px; height: 34px; border: 1px solid var(--line); background: transparent; color: var(--cream); font: 400 16px var(--mega); display: grid; place-items: center; padding: 0; }
+.arrow { width: 44px; height: 44px; border: 1px solid var(--line); background: transparent; color: var(--cream); font: 400 16px var(--mega); display: grid; place-items: center; padding: 0; }
 .arrow:hover { border-color: var(--cream); }
-.strip-cols { display: grid; grid-template-columns: 40px minmax(0, 1fr) minmax(0, 1fr) 56px 64px; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line-2); font: 600 9.5px var(--display); letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
-.strip-cols span:nth-child(n+4) { text-align: right; }
 .picks.strip { display: flex; gap: 14px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; padding: 16px 16px 10px; margin: 0 -16px; scrollbar-width: none; align-items: flex-end; cursor: grab; }
 .picks.strip:focus-visible { outline: 2px solid var(--peach); outline-offset: 4px; }
 .picks.strip::-webkit-scrollbar { display: none; }
@@ -686,7 +682,8 @@ h2 { background: none; color: var(--cream); }
 .wordmark span { display: block; width: max-content; font: 700 100px/.82 var(--mega); font-variation-settings: "wdth" 100; text-transform: uppercase; letter-spacing: -.045em; margin-left: -.035em; white-space: nowrap; color: var(--cream);
   text-shadow: 0 2px 2px rgba(10,10,11,.12), 0 16px 60px rgba(10,10,11,.3); }
 .cover-copy .tag { margin: 0 0 8px; font-size: clamp(22px, 5.6vw, 34px); font-weight: 500; letter-spacing: -.02em; line-height: 1; max-width: none; }
-.cover-copy .tag b { font-weight: 500; background: linear-gradient(120deg, #fbe2cf, var(--peach) 55%, #e39a6f); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cover-copy .tag b { font-weight: 500; }
+.cover-copy .tag i { color: inherit; }
 .cover-foot { margin-top: 18px; }
 .menu-sec { padding-top: 22px; }
 .menu-sec > .num-lbl { margin-bottom: 10px; }
@@ -760,7 +757,7 @@ dialog.lightbox::backdrop { background: rgba(5,5,6,.86); backdrop-filter: blur(6
 .lb-media.zoomed img { transform: scale(2); cursor: zoom-out; transition: transform .4s cubic-bezier(.2,.8,.2,1), transform-origin .08s linear; }
 .lb-media.zoomed .lb-hint { opacity: 0; }
 .lb-ph { position: absolute; inset: 0; display: grid; place-items: center; font: 300 120px var(--mega); color: var(--line); background: linear-gradient(135deg, var(--panel-2), var(--field-2)); }
-.lb-x, .lb-nav { position: absolute; z-index: 2; width: 42px; height: 42px; border: 1px solid rgba(242,236,226,.35); background: rgba(10,10,11,.55); color: var(--cream); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: grid; place-items: center; font: 400 18px var(--mega); padding: 0; }
+.lb-x, .lb-nav { position: absolute; z-index: 2; width: 44px; height: 44px; border: 1px solid rgba(242,236,226,.35); background: rgba(10,10,11,.55); color: var(--cream); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: grid; place-items: center; font: 400 18px var(--mega); padding: 0; }
 .lb-x { right: 12px; top: 12px; font-size: 22px; } .lb-nav { top: 50%; transform: translateY(-50%); } .lb-nav.prev { left: 12px; } .lb-nav.next { right: 12px; }
 .lb-x:hover, .lb-nav:hover { border-color: var(--cream); }
 .lb-n { position: absolute; left: 12px; top: 14px; z-index: 2; font: 400 12px var(--mega); color: var(--cream); background: rgba(10,10,11,.55); padding: 4px 8px; }
@@ -836,7 +833,7 @@ details.fold.add-fold > summary:hover .plus { filter: brightness(1.08); }
 .add-fold[open] .chev { transform: rotate(180deg); }
 .addbox { padding: 14px 12px 18px; }
 .addbox .search { min-height: 54px; border-color: var(--gold-dim); } .addbox .search input { font-size: 16px; } .addbox .search span { font-size: 18px; }
-.addbox .chips { margin-top: 12px; gap: 8px; } .addbox .chip { font-size: 11.5px; min-height: 40px; padding: 8px 14px; }
+.addbox .chips { margin-top: 12px; gap: 8px; } .addbox .chip { font-size: 11.5px; min-height: 44px; padding: 9px 14px; }
 .addbox details.fold summary { font-size: 11.5px; padding: 10px 0; }
 .addbox .restr-note { font-size: 13px; }
 .addbox .station { margin-bottom: 16px; } .addbox .station h3 { font-size: 16px; padding: 14px 14px 12px; } .addbox .station h3 span { font-size: 13px; }
@@ -1015,6 +1012,10 @@ main { position: relative; z-index: 1; }
 .netbar { position: sticky; top: calc(var(--sat) + 53px); z-index: 29; margin: 0; padding: 10px 16px; background: #ff4b33; color: #fff; font: 500 13px/1.4 var(--body); text-align: center; }
 .netbar a { color: #fff; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 @media (min-width: 1200px) { .netbar { top: var(--top-h); font-size: 14px; } }
+
+/* focus: every control shows where the keyboard is */
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--peach); outline-offset: 3px; }
+.tabs button:focus-visible { outline-offset: -4px; }
 </style>
 </head>
 <body>
@@ -1094,7 +1095,6 @@ main { position: relative; z-index: 1; }
           <button class="arrow" id="strip-prev" aria-label="Previous">←</button><button class="arrow" id="strip-next" aria-label="Next">→</button>
         </div>
       </div>
-      <div class="strip-cols" aria-hidden="true"><span>No.</span><span>Dish</span><span>Station</span><span>kcal</span><span>Protein</span></div>
       <div class="picks strip" id="picks" data-zoom="1"></div>
       <div class="strip-bar" aria-hidden="true"><i id="strip-prog"></i></div>
       <div class="hero">
@@ -1136,7 +1136,7 @@ main { position: relative; z-index: 1; }
       <div id="sums" style="margin-top:14px"></div>
       <div class="total"><span>Total</span><b id="tot">0 kcal</b></div>
       <div class="row2">
-        <button class="btn gold" id="optimize" data-build>✦ Optimize</button>
+        <button class="btn gold" id="optimize" data-build>Build my plate</button>
         <button class="btn line" id="alt" disabled>Try another</button>
       </div>
       <div class="row2" style="margin-top:10px">
@@ -1605,7 +1605,7 @@ function renderToday() {
   const sch = schoolObj(); if (!sch) return;
   const today = state.date === iso(new Date());
   const meal = state.meal ? mealName(state.meal) : "";
-  $("#hero-lbl").textContent = `${sch.name} Dining Hall · ${meal || "Menu"}`; $("#cover-when").textContent = today ? "Today" : longDate(state.date);
+  $("#hero-lbl").textContent = `${sch.name} Dining Hall`; $("#cover-when").textContent = `${meal ? meal + ", " : ""}${today ? "today" : longDate(state.date)}`;
   $("#crumb").textContent = `${sch.name} Dining Hall · ${meal || "Menu"} · ${today ? "Today" : longDate(state.date)}`;
   $("#hero-hall").textContent = sch.name;
   const nm = (state.profile.name || "").trim();
@@ -1635,8 +1635,8 @@ function renderToday() {
     : `<div class="empty">${items.length ? "No dishes match your filters." : state.meal ? "No menu published for this meal." : "Loading…"}</div>`;
   picks.scrollLeft = left; stripProgress();
   const tk = $("#ticker-track"), sep = `<i aria-hidden="true">◆</i>`;
-  const lead = `<span class="tk lead"><b>${esc(meal || "Menu")} ${esc(today ? (WHEN[state.meal] || "today") : prettyDate(state.date))}</b><span>${withN.length ? `${withN.length} dishes · ${new Set(withN.map(i => i.stations[0])).size} stations` : "loading…"}</span></span>`;
-  const names = reel.slice(0, 8).map(it => `<button class="tk" data-id="${it.id}"><b>${esc(it.name)}</b><span>${r0(it.nutrition.protein)}g protein · ${r0(it.nutrition.calories)} kcal</span></button>`);
+  const when = WHEN[state.meal] || "today", lead = `<span class="tk lead"><b>${esc(meal || "Menu")} ${esc(today ? (when.includes((meal || "").toLowerCase()) ? "today" : when) : prettyDate(state.date))}</b><span>${withN.length ? `${withN.length} dishes, ${new Set(withN.map(i => i.stations[0])).size} stations` : "loading…"}</span></span>`;
+  const names = reel.slice(0, 8).map(it => `<button class="tk" data-id="${it.id}"><b>${esc(it.name)}</b><span>${r0(it.nutrition.protein)} g protein, ${r0(it.nutrition.calories)} kcal</span></button>`);
   const half = [lead, ...names, `<span class="tk cue"><b>Scroll for the menu</b><span>↓</span></span>`].join(sep) + sep;
   if (tk.dataset.html !== half) { tk.dataset.html = half; tk.innerHTML = half + half; requestAnimationFrame(() => tk.style.setProperty("--dur", `${Math.max(28, Math.round(tk.scrollWidth / 2 / 52))}s`)); }
 }
@@ -1688,7 +1688,7 @@ async function renderMenu() {
   rn.hidden = !active.length; rn.innerHTML = active.length ? `Filtering for <b>${esc(active.join(", "))}</b> from your plan${hidden ? ` · ${hidden} dishes hidden` : ""} · <button class="link" data-plan>Edit</button>` : "";
   const plate = plateFor(k), shown = items.filter(it => passesFilters(it));
   $("#add-n").textContent = shown.length ? `${shown.length} ${shown.length === 1 ? "dish" : "dishes"}` : "";
-  $("#menu-lbl").textContent = state.date === iso(new Date()) ? `Today · ${prettyDate(state.date)}` : longDate(state.date);
+  $("#menu-lbl").textContent = state.date === iso(new Date()) ? `Today, ${prettyDate(state.date)}` : longDate(state.date);
   $("#menu-h").innerHTML = `${esc(mealName(state.meal))} <small><i>(</i>${shown.length} ${shown.length === 1 ? "dish" : "dishes"}<i>)</i></small>`;
   if (!items.length) { el.innerHTML = `<div class="empty">No menu published for ${esc(mealName(state.meal))} on ${prettyDate(state.date)}.</div>`; return; }
   if (!shown.length) { el.innerHTML = `<div class="empty">${state.filters.favOnly ? "None of your favorites are on this menu. Tap ♡ on dishes you like." : "No dishes match these filters."}</div>`; return; }
@@ -1715,14 +1715,14 @@ function renderPlate() {
         <span class="qty"><button data-step="-0.5" aria-label="Less">−</button><span>×${frac(s)}</span><button data-step="0.5" aria-label="More">+</button></span>
         <button class="mini ${locked ? "on" : ""}" data-lock title="Keep when optimizing">${locked ? "🔒" : "🔓"}</button><button class="mini" data-remove title="Remove">✕</button></div>${howSpan(it, s)}</div>
       <div class="pr">${r0(it.nutrition.calories * s)}<small>kcal · P ${r0(it.nutrition.protein * s)}g</small></div></li>`).join("")
-    : `<li style="display:block"><div class="empty">Your plate is empty. Tap + on a dish, or Optimize.</div></li>`;
+    : `<li style="display:block"><div class="empty">Your plate is empty. Add dishes below, or build one for your goal.</div></li>`;
   const t = totals(entries.map(e => [e[0], e[1]]));
   $("#sums").innerHTML = meterHTML("Protein", t.protein, tgt.protein, "var(--protein)") + meterHTML("Carbs", t.carbs, tgt.carbs, "var(--carbs)") + meterHTML("Fat", t.fat, tgt.fat, "var(--fat)")
     + `<div class="meter"><div class="t"><span>Fiber <b>${r0(t.fiber)}g</b> · Sodium <b>${fmt(t.sodium)}mg</b></span></div></div>`;
   $("#tot").innerHTML = `${fmt(t.calories)} kcal<small>of ${fmt(tgt.calories)}</small>`;
   $("#tgt-label").textContent = meal ? `${meal} target · ${Math.round(mealShare() * 100)}% of day` : "Meal target";
   $("#tgt-cal").textContent = `${fmt(tgt.calories)} kcal`;
-  $("#tgt-sub").textContent = `${r0(tgt.protein)}g protein · ${r0(tgt.carbs)}g carbs · ${r0(tgt.fat)}g fat`;
+  $("#tgt-sub").textContent = `${r0(tgt.protein)} g protein, ${r0(tgt.carbs)} g carbs, ${r0(tgt.fat)} g fat`;
   const badge = $("#plate-badge"); badge.hidden = !entries.length; badge.textContent = entries.length;
   const a = state.alts.get(k); $("#alt").disabled = !a || a.list.length < 2; $("#alt").textContent = a && a.list.length > 1 ? `Another (${a.i + 1}/${a.list.length})` : "Try another";
   $("#optimize").disabled = !state.loaded.get(k)?.length;
@@ -2246,7 +2246,7 @@ function stCard(it, n, plate) {
     <button class="open" data-open aria-label="${esc(it.name)}${it.hasNutrition ? `, ${r0(nut.calories)} calories` : ""}: open details"></button>
     <span class="no">${String(n + 1).padStart(2, "0")}</span>
     ${it.hasNutrition ? `<button class="add ${on ? "on" : ""}" data-add aria-label="${on ? "Remove from" : "Add to"} plate">${on ? "✓" : "+"}</button>` : ""}
-    <span class="cap"><i>${esc(it.stations[0] || "")}</i><b>${esc(it.name)}</b><em>${it.hasNutrition ? `${r0(nut.protein)}g protein${m ? ` · ${esc(m.short)}` : ""}` : "No nutrition info"}</em></span>
+    <span class="cap"><i>${esc(it.stations[0] || "")}</i><b>${esc(it.name)}</b><em>${it.hasNutrition ? `${r0(nut.protein)} g protein${m ? `, ${esc(m.short)}` : ""}` : "No nutrition info"}</em></span>
     ${it.hasNutrition ? `<span class="kc">${r0(nut.calories)}<small>kcal</small></span>` : ""}
   </article>`;
 }
@@ -2254,7 +2254,7 @@ function renderStation() {
   const sch = schoolObj(); if (!sch) return;
   const name = state.stationName, list = stationItems(), all = state.loaded.get(key()) || [], meal = state.meal ? mealName(state.meal) : "Menu", today = state.date === iso(new Date());
   const band = $("#st-band"); band.style.setProperty("--c", name ? stationColor(name) : "#202125"); band.classList.toggle("all", !name);
-  $("#st-eyebrow").textContent = `${sch.name} · ${meal} · ${today ? "Today" : prettyDate(state.date)}`;
+  $("#st-eyebrow").textContent = `${sch.name}, ${meal.toLowerCase()}, ${today ? "today" : prettyDate(state.date)}`;
   $("#st-title").innerHTML = `${esc(name || "All stations")} <small>(${list.length} ${list.length === 1 ? "dish" : "dishes"})</small>`;
   const names = stationNames(all);
   $("#st-switch").innerHTML = [`<button class="chip" data-station="" aria-pressed="${!name}">All</button>`, ...names.map(n => `<button class="chip" data-station="${esc(n)}" aria-pressed="${n === name}" style="--c:${stationColor(n)}">${esc(n)}</button>`)].join("");
@@ -2296,7 +2296,7 @@ function renderLightbox() {
   $$(".lb-nav", d).forEach(b => b.hidden = lb.list.length < 2);
   const m = it.hasNutrition ? measure(it, v ? v.servings : 1) : null;
   $("#lb-body").innerHTML = `<div class="lb-band"></div>
-    <div class="eyebrow lb-st">${esc(it.stations.join(" · "))}</div>
+    <div class="eyebrow lb-st">${esc(it.stations.join(", "))}</div>
     <h2>${esc(it.name)}${isFav(it) ? ` <span class="fav">♥</span>` : ""}</h2>
     ${it.hasNutrition ? `<div class="lb-meta"><span class="lb-kc">${r0(n.calories)}<small>kcal</small></span><span class="lb-macros">${macroSpan(n)}</span>${it.serving ? `<span>Serving ${esc(it.serving)}</span>` : ""}<span>${stars(it)}</span></div>`
       : `<p class="muted" style="margin:6px 0 12px">No nutrition info published for this item.</p>`}
