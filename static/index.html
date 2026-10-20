@@ -1010,6 +1010,11 @@ main { position: relative; z-index: 1; }
   dialog.lightbox { width: min(1120px, 94vw); }
 }
 @media (min-width: 1600px) { main { padding: 0 0 96px; gap: 0; } }
+
+/* network trouble banner */
+.netbar { position: sticky; top: calc(var(--sat) + 53px); z-index: 29; margin: 0; padding: 10px 16px; background: #ff4b33; color: #fff; font: 500 13px/1.4 var(--body); text-align: center; }
+.netbar a { color: #fff; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+@media (min-width: 1200px) { .netbar { top: var(--top-h); font-size: 14px; } }
 </style>
 </head>
 <body>
@@ -1043,6 +1048,7 @@ main { position: relative; z-index: 1; }
     </div>
   </header>
 
+  <div class="netbar" id="netbar" hidden role="status"></div>
   <main data-screen="today">
     <div class="cover" id="cover" style="--p:0">
       <div class="cover-media" aria-hidden="true">
@@ -1424,7 +1430,30 @@ function vegRequired() { return state.derived.veg ?? (state.opts.veg || focusOf(
 
 // ---------------- data ----------------
 const STATIC = document.documentElement.hasAttribute("data-static");  // the Netlify build: data files, no server
-async function api(path) { const r = await fetch(path); const b = await r.json().catch(() => ({})); if (!r.ok) throw new Error(b.error || `Request failed (${r.status})`); return b; }
+async function api(path) {
+  let r;
+  try { r = await fetch(path); }
+  catch (e) { netFail(true); throw new Error("Can't reach the menu server"); }
+  const b = await r.json().catch(() => ({}));
+  if (r.status === 403 || r.status === 502 || r.status === 503) netFail(true);
+  else if (r.ok) netFail(false);
+  if (!r.ok) throw new Error(b.error || `Request failed (${r.status})`);
+  return b;
+}
+// When requests fail outright (a network filter, a captive portal, no signal), say so instead of "not served".
+function netFail(on) {
+  if (state.netFail === on) return;
+  state.netFail = on;
+  const bar = $("#netbar");
+  if (on) {
+    const onDomain = /forbrary\.com$/.test(location.hostname);
+    bar.innerHTML = onDomain
+      ? `Can't reach the menu server from this network. On campus Wi-Fi the school's web filter blocks forbrary.com, so use <a href="https://forbrary.onrender.com/${location.hash}">forbrary.onrender.com</a> for now.`
+      : `Can't reach the menu server right now. Check your connection and pull to refresh.`;
+    bar.hidden = false;
+  } else bar.hidden = true;
+  if (state.schools.length) renderMealSeg($("#meals2"));
+}
 function getMenu(meal, date = state.date, school = state.school) {
   const k = key(meal, date, school);
   if (!state.menus.has(k)) {
@@ -1570,7 +1599,7 @@ function factsLabel(it) {
 // ---------------- Today screen ----------------
 function renderMealSeg(el) {
   const sch = schoolObj(); if (!sch) return;
-  el.innerHTML = sch.meals.map(m => { const c = state.counts[m.slug]; return `<button data-meal="${m.slug}" aria-pressed="${m.slug === state.meal}" ${c === 0 ? "disabled" : ""}>${esc(m.name)}<small>${c == null ? "…" : c ? `${c} dishes` : "not served"}</small></button>`; }).join("");
+  el.innerHTML = sch.meals.map(m => { const c = state.counts[m.slug]; return `<button data-meal="${m.slug}" aria-pressed="${m.slug === state.meal}" ${c === 0 ? "disabled" : ""}>${esc(m.name)}<small>${c == null ? "…" : c ? `${c} dishes` : state.netFail ? "unavailable" : "not served"}</small></button>`; }).join("");
 }
 function renderToday() {
   const sch = schoolObj(); if (!sch) return;
