@@ -179,13 +179,15 @@ def get_menu(school, meal, date):
 
 
 # ---------------------------------------------------------------------------
-# Food photos. Nutrislice publishes no pictures, so each dish gets a stock
-# photo of the same kind of food from TheMealDB (free, no key): a plated dish
-# from a name search or category, or a cut-out ingredient photo for sides.
-# Picks are deterministic per dish name and cached to disk.
+# Food photos. Nutrislice publishes no pictures. A dish shows a photo only when
+# we are sure it is the right food: a real Forbes photo in static/photos, a
+# Wikipedia article whose title is the whole dish name, or a TheMealDB
+# ingredient photo whose name is the whole dish name. Anything less certain
+# (a photo of one word of the name, a category stand-in) is left out, and the
+# page draws a plain station-colored card instead. Lookups are cached to disk.
 # ---------------------------------------------------------------------------
 import concurrent.futures
-import hashlib
+import unicodedata
 from urllib.parse import quote
 
 MEALDB = "https://www.themealdb.com"
@@ -261,9 +263,6 @@ PHOTO_RULES = [
     (r"vegetable|veggie|medley", "cat", "Side"),
 ]
 PHOTO_RULES = [(re.compile(p, re.I), k, key) for p, k, key in PHOTO_RULES]
-CATEGORY_FALLBACK = {"side": ("cat", "Side"), "salad": ("meal", "salad"), "dessert": ("cat", "Dessert"), "bread": ("ing", "Bread"),
-                     "soup": ("meal", "soup"), "entree": ("cat", "Miscellaneous"), "sandwich": ("meal", "sandwich"),
-                     "pizza": ("meal", "pizza"), "appetizer": ("cat", "Starter"), "sauce_grvy": ("ing", "Olive Oil"), "condiment": ("ing", "Olive Oil")}
 
 _photo_lists = {}
 _photo_lock = threading.Lock()
@@ -310,7 +309,8 @@ WIKI_UA = {"User-Agent": "MiltonMenu/1.0 (student project; " + os.environ.get("P
 WIKI_STOP = {"with", "and", "the", "of", "in", "on", "sliced", "chopped", "fresh", "mixed", "roasted", "grilled", "steamed", "sauteed",
              "sautéed", "baked", "fried", "crispy", "seared", "blanched", "shredded", "diced", "whole", "style", "house", "homemade",
              "classic", "nonfat", "low", "fat", "free", "hot", "cold", "garlic", "herb", "dijon", "smoky", "old", "bay", "best", "day",
-             "catch", "red", "sheet", "crinkle", "elbow", "yellow", "summer", "asiago", "plain", "mini", "jumbo", "large", "small"}
+             "catch", "red", "sheet", "crinkle", "elbow", "yellow", "summer", "asiago", "plain", "mini", "jumbo", "large", "small",
+             "seasoned", "buttered", "toasted", "marinated", "charred", "organic", "cooked", "assorted", "warm"}
 WIKI_GENERIC = {"food", "dish", "dishe", "cuisine", "as"}
 WIKI_ALIASES = [(r"chick'?n", "chicken"), (r"\bmac\b", "macaroni"), (r"\bbbq\b", "barbecue"), (r"\bveggie\b", "vegetable"),
                 (r"\bpb\b", "peanut butter"), (r"\b\d+x\d+\b|®|™|\(.*?\)", " ")]
@@ -328,27 +328,9 @@ WIKI_TITLE_OVERRIDES = {"Chicken": "Roast chicken", "Turkey (bird)": "Turkey as 
                         "Portobello": "Agaricus bisporus", "Wheat": "Bread", "Soybean": "Tofu", "Potato": "Potato"}
 # Names where the generic search lands somewhere unappetizing; checked first.
 WIKI_SPECIFIC = [
-    (r"chick\w* (strips?|tenders?|fingers?)|chicken strip", "Chicken fingers"), (r"chicken breast|sliced chicken|grilled chicken|chicken cutlet", "Roast chicken"),
-    (r"roast(ed)? chicken|chicken thigh|chicken leg", "Roast chicken"), (r"^tuna$|tuna salad|tuna fish", "Tuna salad"), (r"turkey breast|sliced turkey|deli turkey", "Turkey as food"),
-    (r"hard[- ]cooked egg|hard[- ]boiled egg|boiled egg", "Boiled egg"), (r"scrambled egg", "Scrambled eggs"), (r"flank steak", "Steak"),
-    (r"portobello|portabella", "Agaricus bisporus"), (r"mac(aroni)? (&|and|n) cheese", "Macaroni and cheese"),
-]
-# When the dish name itself finds nothing, fall back to the article for its main food.
-WIKI_KEYWORD_TITLES = [
-    (r"broccoli rabe|rapini", "Rapini"), (r"catch of the day|\bfish\b|tilapia|cod\b|haddock|pollock", "Fish as food"), (r"salmon", "Salmon as food"),
-    (r"tuna", "Tuna salad"), (r"shrimp|prawn|scampi", "Shrimp and prawn as food"), (r"wing", "Buffalo wing"), (r"chicken|poultry|drumstick", "Roast chicken"),
-    (r"turkey", "Turkey as food"), (r"beef|steak|brisket|meatball", "Beef"), (r"pork|bacon|\bham\b|sausage|kielbasa", "Pork"), (r"lamb", "Lamb and mutton"),
-    (r"\beggs?\b|omelet|frittata", "Egg as food"), (r"tofu|tempeh", "Tofu"), (r"shells|pasta|penne|ziti|ravioli|spaghetti|linguine|fettuccine|rigatoni|orzo", "Pasta"),
-    (r"noodle|ramen|udon", "Noodle"), (r"\brice\b|risotto|pilaf", "Cooked rice"), (r"quinoa", "Quinoa"), (r"couscous", "Couscous"),
-    (r"pizza", "Pizza"), (r"burger", "Hamburger"), (r"sandwich|panini|sub\b|hoagie|wrap", "Sandwich"), (r"taco|burrito|quesadilla", "Taco"),
-    (r"salad|greens|lettuce|romaine|spring mix", "Salad"), (r"soup|chowder|bisque|stew|broth", "Soup"), (r"curry|masala|tikka", "Curry"),
-    (r"fries|tots", "French fries"), (r"sweet potato|yam", "Sweet potato"), (r"potato|hash", "Potato"), (r"bread|roll|toast|biscuit|bun|pita|naan|focaccia|breadstick", "Bread"),
-    (r"cheese", "Cheese"), (r"yogurt|parfait", "Yogurt"), (r"oat|granola|cereal", "Oatmeal"), (r"pepper", "Bell pepper"), (r"squash|zucchini", "Summer squash"),
-    (r"mushroom", "Edible mushroom"), (r"bean|lentil|chickpea|hummus", "Legume"), (r"corn", "Sweet corn"), (r"carrot", "Carrot"), (r"tomato|salsa|marinara", "Tomato"),
-    (r"cucumber|pickle", "Cucumber"), (r"onion|scallion", "Onion"), (r"beet", "Beetroot"), (r"fruit|apple|banana|orange|berr|melon|grape|pineapple|mango|peach|pear", "Fruit"),
-    (r"cookie|blondie|brownie|bar\b", "Cookie"), (r"cake|cupcake|muffin", "Cake"), (r"pie|cobbler|tart", "Pie"), (r"pudding|custard", "Pudding"), (r"ice cream", "Ice cream"),
-    (r"sauce|dressing|gravy|crema|aioli|vinaigrette|mayo|mustard|ketchup", "Sauce"), (r"milk|smoothie", "Milk"), (r"juice|lemonade", "Juice"), (r"dessert|sweet", "Dessert"),
-    (r"vegetable|veggie|medley|asparagus|cauliflower|cabbage|spinach|kale|green bean|peas", "Vegetable"),
+    (r"^chick\w* (strips?|tenders?|fingers?)$|^chicken strips?$", "Chicken fingers"),
+    (r"^(roast(ed)?|rotisserie) chicken$", "Roast chicken"), (r"^(southern |buttermilk )?fried chicken$", "Fried chicken"),
+    (r"^scrambled eggs?$", "Scrambled eggs"), (r"^mac(aroni)? (&|and|n) cheese$", "Macaroni and cheese"),
 ]
 
 
@@ -359,8 +341,40 @@ def _wiki_norm(name):
     return re.sub(r"\s+", " ", n).strip()
 
 
+WIKI_FUNC = {"with", "and", "the", "of", "in", "on"}
+
+
+def _fold(s):
+    return "".join(c for c in unicodedata.normalize("NFKD", s) if not unicodedata.combining(c))
+
+
+def _stem(w):
+    """Singular form, the same for both spellings: potatoes/potato, radishes/radish, cookies/cookie, peas/pea."""
+    if len(w) > 4 and w.endswith("ies"):
+        return w[:-3] + "y"
+    if len(w) > 3 and w.endswith("ie"):
+        return w[:-2] + "y"
+    if len(w) > 4 and w.endswith("oes"):
+        return w[:-2]
+    if re.search(r"(ch|sh|x|ss)es$", w):
+        return w[:-2]
+    if w.endswith("s") and not w.endswith(("ss", "us", "is")):
+        return w[:-1]
+    return w
+
+
+def _words(s):
+    return re.findall(r"[a-z']+", _fold(s).lower())
+
+
 def _wiki_toks(s):
-    return [re.sub(r"s$", "", w) for w in re.findall(r"[a-z']+", s.lower()) if w not in WIKI_STOP and len(w) > 2]
+    """The words that say what the food is (cooking words like "grilled" dropped)."""
+    return [_stem(w) for w in _words(s) if w not in WIKI_STOP and len(w) > 2]
+
+
+def _wiki_raw(s):
+    """Every meaningful word, cooking words included, so "Chopped cheese" can't pass for "Grilled Cheese"."""
+    return {_stem(w) for w in _words(s) if w not in WIKI_FUNC and len(w) > 2} - WIKI_GENERIC
 
 
 def _wiki_query(params):
@@ -388,15 +402,21 @@ def _wiki_is_food(page):
     return not (WIKI_NOT_FOOD.search(cats) and len(WIKI_FOODISH.findall(cats)) < 2)
 
 
+_WIKI_ERR = object()  # a lookup failed (network, rate limit), as opposed to "the page has no image"
+
+
 def _wiki_title_thumb(title):
     pages = _wiki_query({"titles": title})
-    p = next((p for p in pages or [] if p.get("thumbnail")), None)
+    if pages is None:
+        return _WIKI_ERR
+    p = next((p for p in pages if p.get("thumbnail")), None)
     return p["thumbnail"]["source"] if p else None
 
 
-def _wiki_pick(pages, want):
-    """Best page whose title is made of the query's own words (ignoring 'as food' etc.) and is about food."""
-    best, best_ov = None, 0
+def _wiki_pick(pages, want, raw):
+    """Image of the first food article whose title is exactly the dish's own words (ignoring 'as food' etc.), or None.
+    want: the dish's food words; raw: all of its words. Every word of the title must be in the dish name."""
+    want = set(want)
     for p in pages or []:
         if "disambiguation" in (p.get("pageprops") or {}) or p["title"].startswith(("List of", "Category:")):
             continue
@@ -405,56 +425,39 @@ def _wiki_pick(pages, want):
             continue
         if p["title"] in WIKI_TITLE_OVERRIDES:
             tt = set(_wiki_toks(p["title"])) - WIKI_GENERIC
-            if tt and tt <= set(want):
+            if tt and tt == want and _wiki_raw(p["title"]) <= raw:
                 t2 = _wiki_title_thumb(WIKI_TITLE_OVERRIDES[p["title"]])
+                if t2 is _WIKI_ERR:
+                    return _WIKI_ERR
                 if t2 and not WIKI_BAD_FILE.search(t2):
                     return t2
             continue
         if WIKI_BAD_FILE.search(thumb):
             continue
         tt = set(_wiki_toks(p["title"])) - WIKI_GENERIC
-        if not tt or not tt <= set(want) or not _wiki_is_food(p):
-            continue
-        ov = len(tt & set(want))
-        if ov < len(want) and ov < 2 and len(want) > 2:
-            continue  # a one-word hit on a long name is too generic; a shorter query will find a better one
-        if ov > best_ov:
-            best, best_ov = thumb, ov
-    return best
+        if tt == want and _wiki_raw(p["title"]) <= raw and _wiki_is_food(p):
+            return thumb
+    return None
 
 
 def wiki_photo(name):
-    """Plain Wikipedia image for a dish name, or None. Cached (misses too)."""
+    """Wikipedia image whose article is the whole dish name, or None. Cached (misses too)."""
     n = _wiki_norm(name)
-    ck = "wiki|" + n.lower()
+    ck = "wiki3|" + n.lower()
     with _photo_lock:
         if ck in _photo_lists:
             return (_photo_lists[ck] or [None])[0]
-    url, errored = None, False
-    low = n.lower()
-    for rx, title in WIKI_SPECIFIC:  # dish-level overrides win over the generic search
-        if re.search(rx, low):
-            url = _wiki_title_thumb(title)
-            break
-    words = n.split()
-    for q in ([n] + [" ".join(words[i:]) for i in range(1, len(words))]) if not url else []:
-        want = _wiki_toks(q)
-        if not want:
-            continue
-        pages = _wiki_query({"generator": "search", "gsrsearch": q, "gsrlimit": 6, "gsrnamespace": 0})
-        if pages is None:
-            errored = True
-            continue
-        url = _wiki_pick(pages, want)
-        if url:
-            break
-        time.sleep(0.05)
-    if not url:
-        for rx, title in WIKI_KEYWORD_TITLES:
-            if re.search(rx, low):
-                url = _wiki_title_thumb(title)
-                errored = errored or url is None
-                break
+    url, errored, low = None, False, n.lower()
+    rule = next((title for rx, title in WIKI_SPECIFIC if re.search(rx, low)), None)
+    if rule:  # a curated article for exactly this food
+        url = _wiki_title_thumb(rule)
+    else:
+        want = _wiki_toks(n)
+        if want:
+            pages = _wiki_query({"generator": "search", "gsrsearch": n, "gsrlimit": 6, "gsrnamespace": 0})
+            url = _WIKI_ERR if pages is None else _wiki_pick(pages, want, _wiki_raw(n))
+    if url is _WIKI_ERR:
+        url, errored = None, True
     with _photo_lock:
         if url or not errored:  # a transient failure must not become a permanent miss
             _photo_lists[ck] = [url] if url else []
@@ -462,11 +465,16 @@ def wiki_photo(name):
     return url
 
 
-def _photo_choice(item):
+def _exact_ingredient(item):
+    """TheMealDB ingredient whose name is the whole dish name (e.g. "Steamed Broccoli" -> Broccoli), or None."""
+    n = _wiki_norm(item["name"])
+    want, raw = set(_wiki_toks(n)), _wiki_raw(n)
+    if not want:
+        return None
     for rx, kind, key in PHOTO_RULES:
-        if rx.search(item["name"]):
-            return kind, key
-    return CATEGORY_FALLBACK.get(item.get("category") or "")
+        if kind == "ing" and rx.search(item["name"]) and set(_wiki_toks(key)) == want and _wiki_raw(key) <= raw:
+            return key
+    return None
 
 
 # ---- Your own photos win: drop a file into static/photos named after the dish
@@ -498,6 +506,27 @@ def local_photo(name):
     return None
 
 
+# Sauces and toppings have no honest photo on their own: their Wikipedia images show them on
+# another dish (sour cream on chili, whipped cream on cocoa). Egg whites show a raw egg, and the
+# hash browns article leads with burger sliders. These always get the plain card.
+NO_PHOTO_RE = re.compile(r"sauce|dressing|gravy|vinaigrette|syrup|glaze|\bdip\b|aioli|condiment|egg whites?|sour cream|"
+                         r"whipped cream|whipped topping|crouton|hash browns?", re.I)
+# A name that comes down to one bare protein ("Grilled Chicken", "Roasted Salmon", "Diced Chicken")
+# finds the article about the animal or about it raw (live chickens, sashimi), never the cooked dish.
+BARE_PROTEIN = {"chicken", "beef", "pork", "turkey", "fish", "salmon", "tuna", "lamb", "steak", "shrimp", "cod", "tilapia",
+                "haddock", "pollock", "duck", "veal", "meat", "poultry"}
+
+
+def _no_photo(name):
+    if NO_PHOTO_RE.search(name):
+        return True
+    n = _wiki_norm(name)
+    if any(re.search(rx, n.lower()) for rx, _ in WIKI_SPECIFIC):
+        return False  # a curated article for exactly this dish ("Fried Chicken") wins
+    toks = set(_wiki_toks(n))
+    return bool(toks) and toks <= BARE_PROTEIN
+
+
 def attach_photos(items):
     # 0) A photo of your own in static/photos, if there is one.
     for it in items:
@@ -505,29 +534,27 @@ def attach_photos(items):
         lp = local_photo(it["name"])
         if lp:
             it["photo"], it["photoKind"] = lp, "local"
-    items_left = [it for it in items if not it["photo"]]
+    items_left = [it for it in items if not it["photo"] and not _no_photo(it["name"])]
     _attach_remote_photos(items_left)
 
 
 def _attach_remote_photos(items):
-    # 1) Plain Wikipedia photo of the dish itself (a few lookups at a time; cached after the first time).
+    # 1) Wikipedia photo of exactly this dish (a few lookups at a time; cached after the first time).
     names = sorted({it["name"] for it in items if it.get("hasNutrition")})
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as ex:
         wiki = dict(zip(names, ex.map(wiki_photo, names)))
-    # 2) Anything still missing: the keyword/category photo sources below.
+    # 2) Still missing: a TheMealDB ingredient photo, but only when the ingredient is the whole dish.
     wanted = {}
     for it in items:
         w = wiki.get(it["name"])
         if w:
             it["photo"], it["photoKind"] = w, "wiki"
             continue
-        choice = _photo_choice(it)
-        if choice:
-            wanted[it["id"]] = choice
-    keys = {f"{k}|{key}" for k, key in wanted.values()}
-    fb = {f"{k}|{key}" for k, key in CATEGORY_FALLBACK.values()}
+        key = _exact_ingredient(it)
+        if key:
+            wanted[it["id"]] = key
     with _photo_lock:
-        missing = [k for k in keys | fb if k not in _photo_lists]
+        missing = [k for k in {f"ing|{key}" for key in wanted.values()} if k not in _photo_lists]
     if missing:
         started = time.time()
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as ex:
@@ -541,20 +568,10 @@ def _attach_remote_photos(items):
         print(f"photos: looked up {len(missing)} keys in {time.time() - started:.1f}s"
               + (f", failed: {failed}" if failed else ""), flush=True)
     for it in items:
-        choice = wanted.get(it["id"])
-        if not choice:
-            continue
-        kind, key = choice
-        lst = _photo_lists.get(f"{kind}|{key}") or []
-        if not lst:  # e.g. a name search with no hits: fall back to the item's category
-            fallback = CATEGORY_FALLBACK.get(it.get("category") or "")
-            if fallback:
-                kind, key = fallback
-                lst = _photo_lists.get(f"{kind}|{key}") or []
+        key = wanted.get(it["id"])
+        lst = _photo_lists.get(f"ing|{key}") or [] if key else []
         if lst:
-            n = int(hashlib.md5(it["name"].lower().encode()).hexdigest(), 16) % len(lst)
-            it["photo"] = lst[n]
-            it["photoKind"] = "ing" if kind == "ing" else "meal"
+            it["photo"], it["photoKind"] = lst[0], "ing"
 
 
 def get_schools():

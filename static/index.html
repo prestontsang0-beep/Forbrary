@@ -217,7 +217,7 @@ details.fold summary::-webkit-details-marker { display: none; }
 .mcard li { display: grid; grid-template-columns: 34px minmax(0,1fr) auto; gap: 10px; align-items: center; padding: 6px 0; font-size: 13px; }
 .mcard li .thumb { width: 34px; height: 34px; }
 .mcard li small { display: block; color: var(--muted); font-size: 11px; }
-.mcard li b { font-family: var(--display); color: var(--gold-2); font-weight: 400; }
+.mcard li > b { font-family: var(--display); color: var(--gold-2); font-weight: 400; }
 .mcard .mm { display: flex; gap: 12px; font-size: 12px; margin-bottom: 10px; }
 
 /* ===== Goals ===== */
@@ -426,7 +426,7 @@ h1 b { font-weight: 600; }
 .rule { font-size: var(--t-1); letter-spacing: .32em; }
 .sec h2, .station h3 { font-size: var(--t1); }
 .hero p { max-width: 56ch; line-height: 1.6; }
-.stat b, .total b, .target b, .kc, .pr, .facts .cal b, .pick .nums b, .mcard li b { font-weight: 300; font-variant-numeric: tabular-nums lining-nums; }
+.stat b, .total b, .target b, .kc, .pr, .facts .cal b, .pick .nums b, .mcard li > b { font-weight: 300; font-variant-numeric: tabular-nums lining-nums; }
 .stat b, .total b, .target b { font-size: var(--t-num); }
 @supports not (-webkit-background-clip: text) { h1 b, h2, .stat b, .total b, .target b, .kc, .pr { color: var(--gold-2); } }
 /* 7. motion */
@@ -570,14 +570,7 @@ main:not([data-screen="today"]) > .cover { display: none; }
 
 /* ---- the strip ---- */
 .strip-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 10px 12px; margin: 30px 0 8px; }
-.strip-tools { margin-left: auto; }
 .strip-head .num-lbl { margin: 0; }
-.strip-tools { display: flex; align-items: center; gap: 10px; }
-.strip-tools .zoom { display: inline-flex; align-items: center; gap: 8px; font: 600 var(--t-1) var(--display); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
-.strip-tools input[type=range] { width: 64px; accent-color: var(--peach); }
-.strip-n { font: 400 13px var(--mega); letter-spacing: .02em; color: var(--cream); font-variant-numeric: tabular-nums; min-width: 54px; text-align: right; }
-.arrow { width: 44px; height: 44px; border: 1px solid var(--line); background: transparent; color: var(--cream); font: 400 16px var(--mega); display: grid; place-items: center; padding: 0; }
-.arrow:hover { border-color: var(--cream); }
 .picks.strip { display: flex; gap: 14px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; padding: 16px 16px 10px; margin: 0 -16px; scrollbar-width: none; align-items: flex-end; cursor: grab; }
 .picks.strip:focus-visible { outline: 2px solid var(--peach); outline-offset: 4px; }
 .picks.strip::-webkit-scrollbar { display: none; }
@@ -654,7 +647,6 @@ h2 { background: none; color: var(--cream); }
   .hero .stats { max-width: none; }
   .picks.strip { margin: 0; padding-inline: 0; gap: 18px; }
   .picks.strip[data-zoom="0"] { --card: 220px; } .picks.strip[data-zoom="1"] { --card: 300px; } .picks.strip[data-zoom="2"] { --card: 420px; }
-  .strip-tools input[type=range] { width: 110px; }
   .tiles { grid-template-columns: repeat(4, 1fr); }
   .tile { aspect-ratio: 1.3; padding: 16px; } .tile b { font-size: 18px; }
   .menu-title { font-size: clamp(56px, 6vw, 92px); }
@@ -732,8 +724,8 @@ h2 { background: none; color: var(--cream); }
 .st-card .no { position: absolute; left: 10px; top: 12px; z-index: 3; pointer-events: none; font: 400 12px var(--mega); color: var(--cream); background: rgba(10,10,11,.5); padding: 3px 6px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
 .st-card .add { position: absolute; right: 10px; top: 10px; z-index: 4; }
 .st-card .cap { position: absolute; left: 12px; right: 76px; bottom: 11px; z-index: 3; pointer-events: none; color: var(--cream); display: grid; gap: 2px; transform: translateY(0); transition: transform .4s cubic-bezier(.2,.8,.2,1); }
-.st-card .cap i { font: 600 9px var(--display); letter-spacing: .22em; text-transform: uppercase; font-style: normal; color: var(--c); }
-.st-card .cap b { font: 500 14px/1.2 var(--body); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.st-card .cap > i { font: 600 9px var(--display); letter-spacing: .22em; text-transform: uppercase; font-style: normal; color: var(--c); }
+.st-card .cap > b { font: 500 14px/1.2 var(--body); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .st-card .cap em { font-style: normal; font-size: 11.5px; color: var(--muted); opacity: 0; max-height: 0; overflow: hidden; transition: opacity .35s, max-height .35s; }
 .st-card .kc { position: absolute; right: 12px; bottom: 12px; z-index: 3; pointer-events: none; font: 400 20px var(--mega); letter-spacing: -.02em; color: var(--cream); text-align: right; line-height: 1; }
 .st-card .kc small { display: block; font: 600 8.5px var(--display); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
@@ -746,7 +738,7 @@ h2 { background: none; color: var(--cream); }
 @media (min-width: 600px) { .st-grid { grid-template-columns: repeat(3, 1fr); } .st-card:nth-child(5n+1) { grid-column: span 2; } }
 @media (min-width: 1200px) {
   .st-band { margin: 0; padding: 24px 28px 22px; } .st-grid { margin: 0; gap: 4px; grid-template-columns: repeat(3, 1fr); }
-  .st-card .cap b { font-size: 15px; } .st-card .kc { font-size: 22px; }
+  .st-card .cap > b { font-size: 15px; }
   #s-station .note { max-width: 60ch; }
 }
 /* dish viewer */
@@ -1016,6 +1008,91 @@ main { position: relative; z-index: 1; }
 /* focus: every control shows where the keyboard is */
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--peach); outline-offset: 3px; }
 .tabs button:focus-visible { outline-offset: -4px; }
+
+/* =====================================================================
+   CLARITY LAYER — protein and calories are the biggest text on every
+   dish card; dishes without a sure photo get a plain station-colored
+   card; the top-protein row is a plain swipe; an About footer.
+   ===================================================================== */
+/* the two numbers */
+.dn { display: inline-flex; align-items: flex-start; gap: 16px; line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums lining-nums; min-width: max-content; }
+.dn > span { display: grid; justify-items: start; gap: 5px; }
+.dn b { font: 500 30px/.9 var(--mega); letter-spacing: -.025em; color: var(--cream); background: none; -webkit-text-fill-color: currentColor; }
+.dn b i { font-style: normal; font-size: .55em; letter-spacing: 0; margin-left: 1px; }
+.dn .p b { color: var(--protein); }
+.dn small { font: 600 10.5px/1 var(--display); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.dn.row { gap: 12px; justify-self: end; }
+.dn.row > span { justify-items: end; gap: 4px; }
+.dn.row b { font-size: 21px; }
+.dn.row small { font-size: 10px; letter-spacing: .1em; }
+.dn.row.mini { gap: 10px; } .dn.row.mini b { font-size: 16px; } .dn.row.mini small { font-size: 9.5px; }
+.dn.none { color: var(--muted); font: 400 18px var(--mega); }
+.sv .dn .p b { color: var(--protein); }
+/* dish list on a phone: the numbers sit under the name so the name keeps its width */
+@media (max-width: 599px) {
+  .item-main { grid-template-columns: 50px minmax(0, 1fr) 38px; row-gap: 8px; }
+  .item-main > .thumb { grid-row: 1 / span 2; align-self: center; }
+  .item-main > .add { grid-column: 3; grid-row: 1 / span 2; align-self: center; }
+  .item-main > .dn.row { grid-column: 2; grid-row: 2; justify-self: start; }
+  .item-main > .dn.row > span { justify-items: start; }
+  .addbox .item-main { grid-template-columns: 58px minmax(0, 1fr) 44px; row-gap: 8px; }
+  .plist li { grid-template-columns: 50px minmax(0, 1fr); row-gap: 8px; }
+  .plist li > .thumb { grid-row: 1 / span 2; align-self: center; }
+  .plist li > .dn.row { grid-column: 2; grid-row: 2; justify-self: start; }
+  .plist li > .dn.row > span { justify-items: start; }
+}
+/* very narrow phones: the serving line would push the station-card caption under the + button */
+@media (max-width: 359px) { .st-card .cap em { display: none; } }
+/* top-protein cards: numbers, then the name, then the station */
+.picks.strip .pick .body { display: block; padding-top: 12px; }
+.picks.strip .pick .dn { margin-bottom: 9px; }
+.picks.strip .pick .dn b { font-size: 36px; }
+.picks.strip .pick .nm { font: 500 14px/1.3 var(--body); }
+.picks.strip .pick .st { margin-top: 5px; }
+.picks.strip .pick:has(.ph.plain) .nm { display: none; }
+/* station-page cards: numbers along the bottom, no separate calorie corner */
+.st-card .cap { right: 12px; gap: 3px; }
+.st-card .cap > b { font-size: 13.5px; }
+.st-card .cap .dn { margin-top: 7px; }
+.st-card .cap .dn b { font-size: 27px; }
+.st-card .cap .dn small { color: rgba(242,236,226,.78); }
+/* dish viewer: the numbers outrank the name */
+.lb-body h2 { font-size: clamp(22px, 5vw, 30px); }
+.lb-meta .dn { margin-right: 6px; }
+.lb-meta .dn b { font-size: 46px; }
+/* plain cards */
+.ph.plain { background: var(--c, var(--panel-2)); color: var(--ink); display: flex; align-items: flex-end; justify-content: flex-start; padding: 14px 14px 16px; text-align: left; filter: none !important;
+  font: 700 clamp(18px, 4.8vw, 24px)/1.05 var(--mega); letter-spacing: -.015em; text-transform: none; }
+.ph.plain span { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.picks.strip .pick .ph.plain { border-color: transparent; }
+.thumb.plain { background: var(--c, var(--panel-2)); color: var(--ink); font: 700 19px var(--mega); filter: none; }
+.st-card .ph.plain { padding: 0; transform: none; }
+.st-card.no-photo::after { background: none; }
+.st-card.no-photo .band { display: none; }
+.st-card.no-photo .cap, .st-card.no-photo .cap > b, .st-card.no-photo .cap > i, .st-card.no-photo .cap em,
+.st-card.no-photo .dn b, .st-card.no-photo .dn .p b, .st-card.no-photo .dn small { color: var(--ink); }
+.st-card.no-photo .cap > b { font-size: 15px; font-weight: 600; }
+.st-card.no-photo .no { background: rgba(20,20,20,.14); color: var(--ink); backdrop-filter: none; -webkit-backdrop-filter: none; }
+.lb-ph { background: var(--c, var(--panel-2)); color: var(--ink); place-items: end start; padding: 28px; text-align: left; font: 700 clamp(26px, 5vw, 40px)/1 var(--mega); letter-spacing: -.02em; }
+.lb-ph:not([hidden]) ~ .lb-hint { color: var(--ink); opacity: .8; }
+.lb-ph:not([hidden]) { padding-bottom: 40px; }
+/* the top-protein row is a plain swipe now */
+.strip-head { justify-content: flex-start; }
+/* About */
+.about { margin: 56px 16px 8px; padding-top: 26px; border-top: 1px solid var(--line); color: var(--cream); }
+.about .num-lbl { margin: 0 0 14px; }
+.about-lede { margin: 0 0 18px; max-width: 60ch; font: 400 16px/1.55 var(--body); color: var(--cream); }
+.about-list { margin: 0; display: grid; gap: 16px; }
+.about-list div { display: grid; gap: 4px; }
+.about-list dt { font: 600 11px var(--display); letter-spacing: .18em; text-transform: uppercase; color: var(--gold-2); }
+.about-list dd { margin: 0; max-width: 62ch; font: 400 14.5px/1.55 var(--body); color: var(--muted); }
+@media (min-width: 600px) { .about-list { grid-template-columns: 1fr 1fr; gap: 20px 32px; } }
+@media (min-width: 1200px) {
+  .picks.strip .pick .dn b { font-size: 42px; }
+  .st-card .cap .dn b { font-size: 30px; }
+  .about { margin: 0; padding: 72px max(48px, calc((100% - 1200px) / 2)) 24px; }
+  .about-list { grid-template-columns: repeat(4, 1fr); }
+}
 </style>
 </head>
 <body>
@@ -1076,7 +1153,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
         </div>
         <div class="seg" id="meals2" style="margin-bottom:12px"></div>
         <div class="tiles" id="stations"></div>
-        <p class="note" style="margin:10px 0 0">Tap a station to see its dishes. The full list lives under My plate.</p>
+        <p class="note" style="margin:10px 0 0">Tap a station to see its dishes.</p>
       </section>
       <blockquote class="quote" id="quote">
         <div class="streaks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -1089,11 +1166,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
       </blockquote>
       <div class="strip-head">
         <h2 class="num-lbl"><b>02</b><span id="picks-h">— Top protein</span></h2>
-        <div class="strip-tools">
-          <label class="zoom">Zoom <input type="range" id="zoom" min="0" max="2" step="1" value="1" aria-label="Image size"></label>
-          <span class="strip-n" id="strip-n">— / —</span>
-          <button class="arrow" id="strip-prev" aria-label="Previous">←</button><button class="arrow" id="strip-next" aria-label="Next">→</button>
-        </div>
       </div>
       <div class="picks strip" id="picks" data-zoom="1"></div>
       <div class="strip-bar" aria-hidden="true"><i id="strip-prog"></i></div>
@@ -1120,7 +1192,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
         </select>
       </div>
       <div class="st-grid" id="st-grid"></div>
-      <p class="note" style="margin:14px 0 0">Tap a photo for the full label and serving guide; use the + to put it on your plate.</p>
+      <p class="note" style="margin:14px 0 0">Tap a dish for the full label and serving guide. Use the + to put it on your plate.</p>
     </section>
 
     <!-- ================= PLATE ================= -->
@@ -1208,7 +1280,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
         <label class="opt" style="justify-content:flex-start"><input type="checkbox" id="veg"> Always include a vegetable</label>
       </details>
       <label class="fld" style="margin-top:10px">Your name<input id="p-name" placeholder="Your name" maxlength="30" autocomplete="given-name"></label>
-      <p class="note" style="margin-top:14px">Estimates only. Growing teens and athletes often need more than calculators say. Check with the school nutritionist or your doctor before cutting calories. Nutrition data is what Milton Dining publishes to Nutrislice; photos are stock photos of the same kind of food.</p>
+      <p class="note" style="margin-top:14px">Estimates only. Growing teens and athletes often need more than calculators say. Check with the school nutritionist or your doctor before cutting calories. Nutrition data is what Milton Dining publishes to Nutrislice. Photos are real Forbes plates or pictures of the same kind of food from Wikipedia and other free photo sites; a dish with no close match gets a plain card.</p>
       <div class="frame notif" id="notif-box">
         <div class="rule">Notifications</div>
         <p class="muted" style="margin:10px 0 0;font-size:13px">A short digest of the menu before each meal: how many dishes, the top protein pick, and which of your favorites are on.</p>
@@ -1227,6 +1299,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
         <button class="btn gold wide" id="install-btn" hidden>Install app</button>
       </div>
     </section>
+
+    <!-- ================= ABOUT ================= -->
+    <footer class="about" aria-labelledby="about-h">
+      <h2 class="num-lbl" id="about-h"><b>04</b><span>— About Forbrary</span></h2>
+      <p class="about-lede">Forbrary shows Milton Academy's dining menus with the protein and calories of every dish, so you can build a plate for your goal.</p>
+      <dl class="about-list">
+        <div><dt>Where the numbers come from</dt><dd>Menus and nutrition facts come from the menus Milton Academy publishes on Nutrislice.</dd></div>
+        <div><dt>Photos</dt><dd>Some photos are real plates from Forbes. Others are pictures of the same kind of food from Wikipedia and other free photo sites, and may show it raw or made a different way. A dish with no close match gets a plain card in its station's color.</dd></div>
+        <div><dt>Portions are estimates</dt><dd>The scoop and hand-size serving guides are estimates until they are checked against the serving utensils in Forbes.</dd></div>
+        <div><dt>Who made it</dt><dd>Built by Preston, a Milton student. Forbrary is not an official Milton Academy site.</dd></div>
+      </dl>
+    </footer>
   </main>
   <div class="sv-fx" aria-hidden="true"><div class="streaks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
 
@@ -1249,7 +1333,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <button class="lb-x" data-close aria-label="Close">×</button>
     <button class="lb-nav prev" data-nav="-1" aria-label="Previous dish">←</button>
     <button class="lb-nav next" data-nav="1" aria-label="Next dish">→</button>
-    <span class="lb-hint" aria-hidden="true">Tap to zoom · swipe for the next dish</span>
+    <span class="lb-hint" id="lb-hint" aria-hidden="true">Tap to zoom · swipe for the next dish</span>
   </div>
   <div class="lb-body" id="lb-body"></div>
 </dialog>
@@ -1584,8 +1668,11 @@ function stars(it) {
   s = Math.max(1, Math.min(5, Math.round(s)));
   return `<span class="stars" title="Nutrition score ${s}/5">${"◆".repeat(s)}<span class="off">${"◆".repeat(5 - s)}</span></span>`;
 }
-function thumb(it, size = "preview") { const src = it.image || photoURL(it, size); return src ? `<div class="thumb" style="background-image:url('${esc(src)}')"></div>` : `<div class="thumb">${esc(it.name[0])}</div>`; }
-function picture(it, size = "medium") { const src = it.image || photoURL(it, size); return src ? `<img class="oct" src="${esc(src)}" alt="" loading="lazy">` : `<div class="ph oct">${esc(it.name[0])}</div>`; }
+// No sure photo for a dish: a plain card in its station's color, never a stand-in picture.
+function thumb(it, size = "preview") { const src = it.image || photoURL(it, size); return src ? `<div class="thumb" style="background-image:url('${esc(src)}')"></div>` : `<div class="thumb plain" style="--c:${stationColor(it.stations[0])}" aria-hidden="true">${esc(it.name[0])}</div>`; }
+function picture(it, size = "medium") { const src = it.image || photoURL(it, size); return src ? `<img class="oct" src="${esc(src)}" alt="" loading="lazy">` : `<div class="ph oct plain" style="--c:${stationColor(it.stations[0])}"><span>${esc(it.name)}</span></div>`; }
+// ---- the two numbers this site is for: protein and calories, set larger than anything else on a dish card
+function dishNums(p, k, cls = "") { return `<span class="dn ${cls}"><span class="p"><b>${p}<i>g</i></b><small>protein</small></span><span class="k"><b>${k}</b><small>kcal</small></span></span>`; }
 function factsLabel(it) {
   const n = it.nutrition, v = (x, u = "g") => x == null ? "—" : `${+x.toFixed(1)}${u}`;
   const row = (l, val, cls = "") => `<div class="r ${cls}"><span>${l}</span><span>${val}</span></div>`;
@@ -1630,8 +1717,7 @@ function renderToday() {
   picks.innerHTML = reel.length ? reel.map((it, n) => `<article class="frame pick" data-id="${it.id}" style="--c:${stationColor(it.stations[0])}">
       <span class="no">${String(n + 1).padStart(2, "0")}</span>
       <button class="add ${plate.has(it.id) ? "on" : ""}" data-add aria-label="Add to plate">${plate.has(it.id) ? "✓" : "+"}</button>
-      ${picture(it)}<div class="body"><div class="nm">${esc(it.name)}</div><div class="st">${esc(it.stations[0] || "")}</div>
-      <div class="nums"><span><b>${r0(it.nutrition.calories)}</b>kcal</span><span><b>${r0(it.nutrition.protein)}g</b>protein</span></div></div></article>`).join("")
+      ${picture(it)}<div class="body">${dishNums(r0(it.nutrition.protein), r0(it.nutrition.calories))}<div class="nm">${esc(it.name)}</div><div class="st">${esc(it.stations[0] || "")}</div></div></article>`).join("")
     : `<div class="empty">${items.length ? "No dishes match your filters." : state.meal ? "No menu published for this meal." : "Loading…"}</div>`;
   picks.scrollLeft = left; stripProgress();
   const tk = $("#ticker-track"), sep = `<i aria-hidden="true">◆</i>`;
@@ -1661,7 +1747,7 @@ function itemHTML(it, plate) {
   return `<div class="item ${state.open.has(it.id) ? "open" : ""}" data-id="${it.id}"><div class="item-main" data-toggle>${thumb(it)}
     <div style="min-width:0"><div class="name">${esc(it.name)}${isFav(it) ? ` <span class="fav">♥</span>` : ""}</div>
     <div class="sub">${it.serving ? `<span>${esc(it.serving)}</span>` : ""}${it.hasNutrition ? macroSpan(n) : `<span>No nutrition info</span>`}${tags}</div></div>
-    <div class="kc">${it.hasNutrition ? `${r0(n.calories)}<small>kcal</small>` : "—"}</div>
+    ${it.hasNutrition ? dishNums(r0(n.protein), r0(n.calories), "row") : `<span class="dn row none">—</span>`}
     <button class="add ${on ? "on" : ""}" data-add aria-label="${on ? "Remove from" : "Add to"} plate" ${it.hasNutrition ? "" : "disabled"}>${on ? "✓" : "+"}</button></div>${detail}</div>`;
 }
 function stationNames(items = state.loaded.get(key()) || []) { return [...new Set(items.filter(i => !(state.filters.hideGarnish && isGarnish(i))).map(i => i.stations[0]))]; }
@@ -1714,7 +1800,7 @@ function renderPlate() {
       <div style="min-width:0"><div class="pn">${esc(it.name)}</div><div class="ctl">
         <span class="qty"><button data-step="-0.5" aria-label="Less">−</button><span>×${frac(s)}</span><button data-step="0.5" aria-label="More">+</button></span>
         <button class="mini ${locked ? "on" : ""}" data-lock title="Keep when optimizing">${locked ? "🔒" : "🔓"}</button><button class="mini" data-remove title="Remove">✕</button></div>${howSpan(it, s)}</div>
-      <div class="pr">${r0(it.nutrition.calories * s)}<small>kcal · P ${r0(it.nutrition.protein * s)}g</small></div></li>`).join("")
+      ${dishNums(r0(it.nutrition.protein * s), r0(it.nutrition.calories * s), "row")}</li>`).join("")
     : `<li style="display:block"><div class="empty">Your plate is empty. Add dishes below, or build one for your goal.</div></li>`;
   const t = totals(entries.map(e => [e[0], e[1]]));
   $("#sums").innerHTML = meterHTML("Protein", t.protein, tgt.protein, "var(--protein)") + meterHTML("Carbs", t.carbs, tgt.carbs, "var(--carbs)") + meterHTML("Fat", t.fat, tgt.fat, "var(--fat)")
@@ -1729,9 +1815,14 @@ function renderPlate() {
   if (state.loaded.has(k)) savePlate(k, entries);
   renderHistory();
 }
-const sigOf = items => JSON.stringify(items.map(i => [i.id, i.s, !!i.locked]));
+const sigOf = items => JSON.stringify(items.map(i => [i.id, i.s, !!i.locked, i.photo || ""]));
+// Plates saved before photos had to be a sure match carry stand-in pictures; keep only real Forbes photos.
+if (!store.get("platesPhotoV2", false)) {
+  for (const v of Object.values(state.saved)) for (const i of v.items || []) if (i.photo && !i.photo.startsWith("/photos/")) i.photo = "";
+  store.set("plates", state.saved); store.set("platesPhotoV2", true);
+}
 function savePlate(k, entries) {
-  const items = entries.map(([it, s, locked]) => ({ id: it.id, s, locked: !!locked, name: it.name, photo: photoURL(it, "preview") || "", cal: r0(it.nutrition.calories * s), p: r0(it.nutrition.protein * s) }));
+  const items = entries.map(([it, s, locked]) => ({ id: it.id, s, locked: !!locked, name: it.name, st: it.stations?.[0] || "", photo: it.image || photoURL(it, "preview") || "", cal: r0(it.nutrition.calories * s), p: r0(it.nutrition.protein * s) }));
   const prev = state.saved[k];
   if (prev ? sigOf(prev.items) === sigOf(items) : !items.length) return;
   if (items.length) state.saved[k] = { t: Date.now(), items }; else delete state.saved[k];
@@ -1744,7 +1835,7 @@ function renderHistory() {
   $("#history").innerHTML = list.length ? list.slice(0, 4).map(([k, v]) => {
     const [school, date, meal] = k.split("|"); const sch = state.schools.find(x => x.slug === school);
     const cal = v.items.reduce((a, i) => a + i.cal, 0);
-    return `<div class="frame rcard" data-key="${esc(k)}"><div class="pics">${v.items.slice(0, 3).map(i => i.photo ? `<div class="thumb" style="background-image:url('${esc(i.photo)}')"></div>` : `<div class="thumb">${esc(i.name[0])}</div>`).join("")}</div>
+    return `<div class="frame rcard" data-key="${esc(k)}"><div class="pics">${v.items.slice(0, 3).map(i => i.photo ? `<div class="thumb" style="background-image:url('${esc(i.photo)}')"></div>` : i.st ? `<div class="thumb plain" style="--c:${stationColor(i.st)}" aria-hidden="true">${esc(i.name[0])}</div>` : `<div class="thumb">${esc(i.name[0])}</div>`).join("")}</div>
       <b>${esc(sch?.meals.find(m => m.slug === meal)?.name || meal)} · ${esc(sch?.name || school)}</b><span>${prettyDate(date)} · ${fmt(cal)} kcal</span></div>`;
   }).join("") : `<div class="empty" style="grid-column:1/-1;padding:16px">Plates you build on other days show up here.</div>`;
 }
@@ -1837,7 +1928,7 @@ async function planDay() {
   state.dayPlans = plans; $("#day-again").disabled = false;
   const day = totals(plans.flatMap(p => p.entries));
   body.innerHTML = plans.map(p => `<div class="frame mcard"><h3>${esc(p.m.name)}<span>${fmt(p.t.calories)} / ${fmt(p.tgt.calories)} kcal</span></h3>
-      <ul>${p.entries.map(([it, s]) => `<li>${thumb(it)}<span>${esc(it.name)}<small>×${frac(s)} · ${esc(it.serving || "serving")}${(m => m ? ` · ≈ ${esc(m.short)}` : "")(measure(it, s))}</small></span><b>${r0(it.nutrition.calories * s)}</b></li>`).join("") || "<li>No matching dishes</li>"}</ul>
+      <ul>${p.entries.map(([it, s]) => `<li>${thumb(it)}<span>${esc(it.name)}<small>×${frac(s)} · ${esc(it.serving || "serving")}${(m => m ? ` · ≈ ${esc(m.short)}` : "")(measure(it, s))}</small></span>${dishNums(r0(it.nutrition.protein * s), r0(it.nutrition.calories * s), "row mini")}</li>`).join("") || "<li>No matching dishes</li>"}</ul>
       <div class="mm">${macroSpan(p.t)}</div><button class="btn line wide" data-use="${esc(p.m.slug)}" style="min-height:42px">Use as my plate</button></div>`).join("")
     + `<div class="frame strong" style="padding:12px 14px">${meterHTML("Calories", day.calories, g.calories, "var(--gold)", "")}${meterHTML("Protein", day.protein, g.protein, "var(--protein)")}${meterHTML("Carbs", day.carbs, g.carbs, "var(--carbs)")}${meterHTML("Fat", day.fat, g.fat, "var(--fat)")}</div>`
     + (Math.abs(shareSum - 1) > 0.05 ? `<p class="note" style="margin-top:10px">Meal targets were scaled so ${avail.map(a => a[0].name).join(" + ")} add up to your full day.</p>` : "");
@@ -2140,9 +2231,9 @@ function bindPush() {
 
 // ---------------- edition: station colors, cover scroll, image strip ----------------
 // Flat station colors (Menu Durable palette). Familiar stations get a fixed color, the rest hash to one.
-const STATION_PALETTE = ["#ff4b33", "#ff9a3c", "#f27a72", "#c58cf5", "#8f5fe0", "#6a86f2", "#3aa7d9", "#6fd1c8", "#37c88d", "#ffd23f"];
+const STATION_PALETTE = ["#ff4b33", "#ff9a3c", "#f27a72", "#c58cf5", "#9f74ee", "#6a86f2", "#3aa7d9", "#6fd1c8", "#37c88d", "#ffd23f"];
 const STATION_FIXED = [[/hot bar|entr|main/i, "#ff4b33"], [/salad/i, "#37c88d"], [/deli|sandwich/i, "#ffd23f"], [/pasta|noodle/i, "#ff9a3c"], [/grill/i, "#f27a72"],
-  [/line 1|breakfast/i, "#6a86f2"], [/line 2|brunch/i, "#3aa7d9"], [/exhibition|action|chef/i, "#8f5fe0"], [/soup/i, "#6fd1c8"], [/dessert|bakery|sweet/i, "#c58cf5"], [/pizza/i, "#ff9a3c"], [/vegan|plant/i, "#37c88d"]];
+  [/line 1|breakfast/i, "#6a86f2"], [/line 2|brunch/i, "#3aa7d9"], [/exhibition|action|chef/i, "#9f74ee"], [/soup/i, "#6fd1c8"], [/dessert|bakery|sweet/i, "#c58cf5"], [/pizza/i, "#ff9a3c"], [/vegan|plant/i, "#37c88d"]];
 function stationColor(name = "") {
   for (const [rx, c] of STATION_FIXED) if (rx.test(name)) return c;
   let h = 0; for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
@@ -2187,15 +2278,11 @@ function coverScroll() {
 }
 function stripProgress() {
   const s = $("#picks"); if (!s) return;
-  const max = s.scrollWidth - s.clientWidth, cards = s.querySelectorAll(".pick").length;
+  const max = s.scrollWidth - s.clientWidth;
   $("#strip-prog").style.width = `${max > 0 ? Math.round(s.scrollLeft / max * 100) : 100}%`;
-  const card = s.querySelector(".pick"), w = card ? card.offsetWidth + parseFloat(getComputedStyle(s).columnGap || 14) : 1;
-  const idx = Math.min(cards, Math.round(s.scrollLeft / w) + 1);
-  $("#strip-n").textContent = cards ? `${String(idx).padStart(2, "0")} / ${String(cards).padStart(2, "0")}` : "— / —";
 }
 function stripInit() {
   const s = $("#picks"); if (!s || s.dataset.init) return; s.dataset.init = "1";
-  const z = store.get("zoom", 1); s.dataset.zoom = z; $("#zoom").value = z;
   // a mouse wheel moves the strip sideways until it reaches an end, then the page scrolls on
   let wheelT = 0;
   s.addEventListener("wheel", e => {
@@ -2215,10 +2302,10 @@ function stripInit() {
   s.addEventListener("dragstart", e => e.preventDefault());
   s.addEventListener("scroll", stripProgress, { passive: true });
   s.tabIndex = 0; s.setAttribute("role", "group"); s.setAttribute("aria-labelledby", "picks-h"); s.setAttribute("aria-description", "Use the left and right arrow keys to scroll");
-  s.addEventListener("keydown", e => { if (e.key === "ArrowRight") $("#strip-next").click(); else if (e.key === "ArrowLeft") $("#strip-prev").click(); });
-  $("#zoom").oninput = e => { s.dataset.zoom = e.target.value; store.set("zoom", +e.target.value); requestAnimationFrame(stripProgress); };
-  $("#strip-prev").onclick = () => s.scrollBy({ left: -s.clientWidth * 0.8, behavior: "smooth" });
-  $("#strip-next").onclick = () => s.scrollBy({ left: s.clientWidth * 0.8, behavior: "smooth" });
+  s.addEventListener("keydown", e => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    e.preventDefault(); s.scrollBy({ left: (e.key === "ArrowRight" ? 1 : -1) * s.clientWidth * 0.8, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  });
   addEventListener("scroll", onScroll, { passive: true });
   addEventListener("resize", () => { fitWordmark(); fitQuote(); onScroll(); stripProgress(); });
 }
@@ -2241,13 +2328,12 @@ function stationItems(name = state.stationName) {
 }
 function stCard(it, n, plate) {
   const src = it.image || photoURL(it, "medium"), on = plate.has(it.id), nut = it.nutrition || {}, m = it.hasNutrition ? measure(it, 1) : null;
-  return `<article class="st-card" data-id="${it.id}" style="--c:${stationColor(it.stations[0])}">
-    ${src ? `<img src="${esc(src)}" alt="" loading="lazy">` : `<div class="ph">${esc(it.name[0])}</div>`}<span class="sheen"></span><span class="band"></span>
+  return `<article class="st-card${src ? "" : " no-photo"}" data-id="${it.id}" style="--c:${stationColor(it.stations[0])}">
+    ${src ? `<img src="${esc(src)}" alt="" loading="lazy">` : `<div class="ph plain"></div>`}<span class="sheen"></span><span class="band"></span>
     <button class="open" data-open aria-label="${esc(it.name)}${it.hasNutrition ? `, ${r0(nut.calories)} calories` : ""}: open details"></button>
     <span class="no">${String(n + 1).padStart(2, "0")}</span>
     ${it.hasNutrition ? `<button class="add ${on ? "on" : ""}" data-add aria-label="${on ? "Remove from" : "Add to"} plate">${on ? "✓" : "+"}</button>` : ""}
-    <span class="cap"><i>${esc(it.stations[0] || "")}</i><b>${esc(it.name)}</b><em>${it.hasNutrition ? `${r0(nut.protein)} g protein${m ? `, ${esc(m.short)}` : ""}` : "No nutrition info"}</em></span>
-    ${it.hasNutrition ? `<span class="kc">${r0(nut.calories)}<small>kcal</small></span>` : ""}
+    <span class="cap"><i>${esc(it.stations[0] || "")}</i><b>${esc(it.name)}</b>${it.hasNutrition ? dishNums(r0(nut.protein), r0(nut.calories)) : ""}<em>${it.hasNutrition ? (m ? esc(m.short) : "") : "No nutrition info"}</em></span>
   </article>`;
 }
 function renderStation() {
@@ -2290,7 +2376,9 @@ function renderLightbox() {
   const it = lb.list[lb.i]; if (!it) return;
   const d = $("#dish-dlg"), n = it.nutrition || {}, v = plateFor().get(it.id), src = it.image || photoURL(it, "medium"), media = $("#lb-media");
   d.style.setProperty("--c", stationColor(it.stations[0]));
-  const img = $("#lb-img"); if (src) { img.src = src; img.hidden = false; $("#lb-ph").hidden = true; } else { img.removeAttribute("src"); img.hidden = true; $("#lb-ph").hidden = false; $("#lb-ph").textContent = it.name[0]; }
+  const img = $("#lb-img"); if (src) { img.src = src; img.hidden = false; $("#lb-ph").hidden = true; } else { img.removeAttribute("src"); img.hidden = true; $("#lb-ph").hidden = false; $("#lb-ph").textContent = it.stations[0] || it.name; }
+  const many = lb.list.length > 1;
+  $("#lb-hint").textContent = src ? (many ? "Tap to zoom · swipe for the next dish" : "Tap to zoom") : (many ? "Swipe for the next dish" : "");
   media.classList.remove("zoomed"); media.style.removeProperty("--ox"); media.style.removeProperty("--oy");
   $("#lb-n").textContent = `${String(lb.i + 1).padStart(2, "0")} / ${String(lb.list.length).padStart(2, "0")}`;
   $$(".lb-nav", d).forEach(b => b.hidden = lb.list.length < 2);
@@ -2298,7 +2386,7 @@ function renderLightbox() {
   $("#lb-body").innerHTML = `<div class="lb-band"></div>
     <div class="eyebrow lb-st">${esc(it.stations.join(", "))}</div>
     <h2>${esc(it.name)}${isFav(it) ? ` <span class="fav">♥</span>` : ""}</h2>
-    ${it.hasNutrition ? `<div class="lb-meta"><span class="lb-kc">${r0(n.calories)}<small>kcal</small></span><span class="lb-macros">${macroSpan(n)}</span>${it.serving ? `<span>Serving ${esc(it.serving)}</span>` : ""}<span>${stars(it)}</span></div>`
+    ${it.hasNutrition ? `<div class="lb-meta">${dishNums(r0(n.protein), r0(n.calories), "lb")}<span class="lb-macros">${macroSpan(n)}</span>${it.serving ? `<span>Serving ${esc(it.serving)}</span>` : ""}<span>${stars(it)}</span></div>`
       : `<p class="muted" style="margin:6px 0 12px">No nutrition info published for this item.</p>`}
     ${it.hasNutrition ? `<div class="lb-actions">${v ? `<div class="lb-qty"><button data-step="-0.5" aria-label="Fewer servings">−</button><span>×${frac(v.servings)} on plate</span><button data-step="0.5" aria-label="More servings">+</button></div>` : `<button class="btn gold" data-add>+ Add to plate</button>`}<button class="btn line" data-fav>${isFav(it) ? "♥ Favorited" : "♡ Favorite"}</button></div>` : ""}
     ${m ? `<div class="how-line">${howIcon(m)}<div><div class="k">How much is ${v && v.servings !== 1 ? `×${frac(v.servings)}` : "a serving"}</div><div class="v">${esc(m.text)}</div><div class="tip">${esc(m.tip)}</div><button class="link" data-guide>Hand guide ›</button></div></div>` : ""}
